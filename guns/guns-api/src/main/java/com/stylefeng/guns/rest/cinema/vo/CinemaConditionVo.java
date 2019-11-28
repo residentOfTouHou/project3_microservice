@@ -8,12 +8,12 @@ import java.io.Serializable;
  * Created by IntelliJ IDEA
  *
  * @author zhanghj
- * @date 2019/11/27
- * @time 22:01
+ * @date 2019/11/28
+ * @time 23:07
  */
 @Data
-public class BaseRespVo implements Serializable {
-    private static final long serialVersionUID = -3692431370139291593L;
+public class CinemaConditionVo implements Serializable {
+    private static final long serialVersionUID = 2215408994591478485L;
 
     private Object data;
 

@@ -28,7 +28,7 @@ public class CinemasRespVo implements Serializable {
 
     private Integer nowPage;
 
-    private Integer Status;
+    private Integer status;
 
     private Integer totalPage;
 }

@@ -1,5 +1,6 @@
 package com.stylefeng.guns.rest.cinema;
 
+import com.stylefeng.guns.rest.cinema.vo.CinemaConditionVo;
 import com.stylefeng.guns.rest.cinema.vo.CinemasRespVo;
 
 /**
@@ -12,4 +13,5 @@ import com.stylefeng.guns.rest.cinema.vo.CinemasRespVo;
 public interface CinemaService {
     CinemasRespVo getCinemas(Integer brandId, Integer hallType, Integer areaId, Integer pageSize, Integer nowPage);
 
+    CinemaConditionVo getCinemaCondition(Integer brandId, Integer hallType, Integer areaId);
 }
