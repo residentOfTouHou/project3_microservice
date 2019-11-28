@@ -35,7 +35,7 @@ public class JwtTokenUtil {
     /**
      * 获取用户名从token中
      */
-    public String getUsernameFromToken(String token) {
+    public String getUsgetRandomKeyernameFromToken(String token) {
         return getClaimFromToken(token).getSubject();
     }
 
@@ -119,7 +119,9 @@ public class JwtTokenUtil {
      * 生成token
      */
     private String doGenerateToken(Map<String, Object> claims, String subject) {
+        //发行时间
         final Date createdDate = new Date();
+        //过期时间
         final Date expirationDate = new Date(createdDate.getTime() + jwtProperties.getExpiration() * 1000);
 
         return Jwts.builder()

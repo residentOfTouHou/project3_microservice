@@ -35,12 +35,14 @@ public class AuthFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws IOException, ServletException {
+        //如果是访问 /auth 接口，无需拦截
         if (request.getServletPath().equals("/" + jwtProperties.getAuthPath())) {
             chain.doFilter(request, response);
             return;
         }
         final String requestHeader = request.getHeader(jwtProperties.getHeader());
         String authToken = null;
+        //判断requestHeader是以Bearer 开头的
         if (requestHeader != null && requestHeader.startsWith("Bearer ")) {
             authToken = requestHeader.substring(7);
 
