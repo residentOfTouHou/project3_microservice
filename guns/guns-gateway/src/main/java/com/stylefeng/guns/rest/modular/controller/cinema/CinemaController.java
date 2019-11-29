@@ -2,7 +2,6 @@ package com.stylefeng.guns.rest.modular.controller.cinema;
 
 import com.alibaba.dubbo.config.annotation.Reference;
 import com.stylefeng.guns.rest.cinema.CinemaService;
-import com.stylefeng.guns.rest.cinema.vo.CinemaConditionListVo;
 import com.stylefeng.guns.rest.cinema.vo.CinemaConditionVo;
 import com.stylefeng.guns.rest.cinema.vo.CinemasRespVo;
 import org.springframework.web.bind.annotation.RequestMapping;

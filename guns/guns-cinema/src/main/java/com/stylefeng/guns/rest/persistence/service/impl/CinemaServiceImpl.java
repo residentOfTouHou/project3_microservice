@@ -47,7 +47,7 @@ public class CinemaServiceImpl implements CinemaService {
     public CinemasRespVo getCinemas(Integer brandId, Integer hallType, Integer areaId, Integer pageSize, Integer nowPage) {
         EntityWrapper<MtimeCinemaT> entityWrapper = new EntityWrapper<>();
         if(brandId!=99){
-            entityWrapper.eq("uuid",brandId);
+            entityWrapper.eq("brand_id",brandId);
         }
         if(hallType!=99){
             entityWrapper.like("hall_ids", String.valueOf(hallType));
@@ -55,20 +55,30 @@ public class CinemaServiceImpl implements CinemaService {
         if(areaId!=99){
             entityWrapper.eq("area_id",areaId);
         }
-        RowBounds rowBounds = new RowBounds(nowPage,pageSize);
+        RowBounds rowBounds = new RowBounds((nowPage-1)*pageSize,pageSize);
         List<MtimeCinemaT> mtimeCinemaTS = mtimeCinemaTMapper.selectPage(rowBounds, entityWrapper);
 
         List<CinemaVo> cinemaVoList = new ArrayList<>();
         if(mtimeCinemaTS.size()!=0){
-            BeanUtils.copyProperties(mtimeCinemaTS,cinemaVoList);
+            for (MtimeCinemaT mtimeCinemaT : mtimeCinemaTS) {
+                CinemaVo cinemaVo = new CinemaVo();
+                BeanUtils.copyProperties(mtimeCinemaT,cinemaVo);
+                cinemaVoList.add(cinemaVo);
+            }
+
         }
 
         CinemasRespVo cinemasRespVo = new CinemasRespVo();
         cinemasRespVo.setData(cinemaVoList);
-        cinemasRespVo.setNowPage(nowPage);
         if(cinemaVoList.size()!=0){
-            int total = cinemaVoList.size() / pageSize + 1; //totalPage 向上取整
+            cinemasRespVo.setNowPage(nowPage);
+
+            int size = mtimeCinemaTMapper.selectList(entityWrapper).size();
+            int total = size % pageSize == 0 ? size/pageSize : size/pageSize + 1; //totalPage 向上取整
             cinemasRespVo.setTotalPage(total);
+        }else{
+            cinemasRespVo.setNowPage(0);
+            cinemasRespVo.setTotalPage(0);
         }
         cinemasRespVo.setStatus(0);
         return cinemasRespVo;
@@ -84,11 +94,12 @@ public class CinemaServiceImpl implements CinemaService {
                 BrandVo brandVo = new BrandVo();
                 brandVo.setBrandId(mtimeBrandDictT.getUuid());
                 brandVo.setBrandName(mtimeBrandDictT.getShowName());
-                if(mtimeBrandDictT.getUuid()==99){
+                if(mtimeBrandDictT.getUuid().equals(brandId)){
                     brandVo.setActive(true);
                 }else{
                     brandVo.setActive(false);
                 }
+                brandVoList.add(brandVo);
             }
         }
 
@@ -100,11 +111,12 @@ public class CinemaServiceImpl implements CinemaService {
                 AreaVo areaVo = new AreaVo();
                 areaVo.setAreaId(mtimeAreaDictT.getUuid());
                 areaVo.setAreaName(mtimeAreaDictT.getShowName());
-                if(mtimeAreaDictT.getUuid()==99){
+                if(mtimeAreaDictT.getUuid().equals(areaId)){
                     areaVo.setActive(true);
                 }else{
                     areaVo.setActive(false);
                 }
+                areaVoList.add(areaVo);
             }
         }
 
@@ -116,11 +128,12 @@ public class CinemaServiceImpl implements CinemaService {
                 HallTypeVo hallTypeVo = new HallTypeVo();
                 hallTypeVo.setHalltypeId(mtimeHallDictT.getUuid());
                 hallTypeVo.setHalltypeName(mtimeHallDictT.getShowName());
-                if(mtimeHallDictT.getUuid()==99){
+                if(mtimeHallDictT.getUuid().equals(hallType)){ //显示请求参数的对应者
                     hallTypeVo.setActive(true);
                 }else{
                     hallTypeVo.setActive(false);
                 }
+                hallTypeVos.add(hallTypeVo);
             }
         }
 
