@@ -54,7 +54,7 @@ CREATE TABLE `sys_dict` (
   `pid` int(11) DEFAULT NULL COMMENT '父级字典',
   `name` varchar(255) DEFAULT NULL COMMENT '名称',
   `tips` varchar(255) DEFAULT NULL COMMENT '提示',
-  `code` varchar(255) DEFAULT NULL COMMENT '值',
+  `status` varchar(255) DEFAULT NULL COMMENT '值',
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE=InnoDB AUTO_INCREMENT=69 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='字典表';
 
@@ -116,7 +116,7 @@ CREATE TABLE `sys_login_log` (
 DROP TABLE IF EXISTS `sys_menu`;
 CREATE TABLE `sys_menu` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '主键id',
-  `code` varchar(255) DEFAULT NULL COMMENT '菜单编号',
+  `status` varchar(255) DEFAULT NULL COMMENT '菜单编号',
   `pcode` varchar(255) DEFAULT NULL COMMENT '菜单父编号',
   `pcodes` varchar(255) DEFAULT NULL COMMENT '当前菜单的所有父菜单编号',
   `name` varchar(255) DEFAULT NULL COMMENT '菜单名称',
@@ -169,7 +169,7 @@ INSERT INTO `sys_menu` VALUES ('142', 'notice_add', 'notice', '[0],[system],[not
 INSERT INTO `sys_menu` VALUES ('143', 'notice_update', 'notice', '[0],[system],[notice],', '修改通知', null, '/notice/update', '2', '3', '0', null, '1', null);
 INSERT INTO `sys_menu` VALUES ('144', 'notice_delete', 'notice', '[0],[system],[notice],', '删除通知', null, '/notice/delete', '3', '3', '0', null, '1', null);
 INSERT INTO `sys_menu` VALUES ('145', 'hello', '0', '[0],', '通知', 'fa-rocket', '/notice/hello', '1', '1', '1', null, '1', null);
-INSERT INTO `sys_menu` VALUES ('148', 'code', '0', '[0],', '代码生成', 'fa-code', '/code', '3', '1', '1', null, '1', null);
+INSERT INTO `sys_menu` VALUES ('148', 'status', '0', '[0],', '代码生成', 'fa-status', '/status', '3', '1', '1', null, '1', null);
 INSERT INTO `sys_menu` VALUES ('149', 'api_mgr', '0', '[0],', '接口文档', 'fa-leaf', '/swagger-ui.html', '2', '1', '1', null, '1', null);
 INSERT INTO `sys_menu` VALUES ('150', 'to_menu_edit', 'menu', '[0],[system],[menu],', '菜单编辑跳转', '', '/menu/menu_edit', '4', '3', '0', null, '1', null);
 INSERT INTO `sys_menu` VALUES ('151', 'menu_list', 'menu', '[0],[system],[menu],', '菜单列表', '', '/menu/list', '5', '3', '0', null, '1', null);

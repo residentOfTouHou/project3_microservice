@@ -1,6 +1,6 @@
-package com.stylefeng.guns.rest.persistence.dao;
+package com.stylefeng.guns.rest.common.persistence.dao;
 
-import com.stylefeng.guns.rest.persistence.model.MtimeFilmT;
+import com.stylefeng.guns.rest.common.persistence.model.MtimeFilmT;
 import com.baomidou.mybatisplus.mapper.BaseMapper;
 
 /**
@@ -9,7 +9,7 @@ import com.baomidou.mybatisplus.mapper.BaseMapper;
  * </p>
  *
  * @author stylefeng
- * @since 2019-11-27
+ * @since 2019-11-28
  */
 public interface MtimeFilmTMapper extends BaseMapper<MtimeFilmT> {
 
