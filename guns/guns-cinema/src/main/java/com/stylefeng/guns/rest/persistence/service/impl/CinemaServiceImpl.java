@@ -65,7 +65,6 @@ public class CinemaServiceImpl implements CinemaService {
                 BeanUtils.copyProperties(mtimeCinemaT,cinemaVo);
                 cinemaVoList.add(cinemaVo);
             }
-
         }
 
         CinemasRespVo cinemasRespVo = new CinemasRespVo();
