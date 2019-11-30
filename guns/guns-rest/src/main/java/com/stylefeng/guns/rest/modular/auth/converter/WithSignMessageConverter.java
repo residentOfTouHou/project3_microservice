@@ -23,6 +23,9 @@ import java.lang.reflect.Type;
  * @author fengshuonan
  * @date 2017-08-25 15:42
  */
+/*
+FastJsonHttpMessageConverter会自动把带有json格式的http请求捕获到
+*/
 public class WithSignMessageConverter extends FastJsonHttpMessageConverter {
 
     @Autowired
@@ -37,6 +40,7 @@ public class WithSignMessageConverter extends FastJsonHttpMessageConverter {
     @Override
     public Object read(Type type, Class<?> contextClass, HttpInputMessage inputMessage) throws IOException, HttpMessageNotReadableException {
 
+        //把传递过来的 baseTransferEntity 拿到
         InputStream in = inputMessage.getBody();
         Object o = JSON.parseObject(in, super.getFastJsonConfig().getCharset(), BaseTransferEntity.class, super.getFastJsonConfig().getFeatures());
 
@@ -45,10 +49,13 @@ public class WithSignMessageConverter extends FastJsonHttpMessageConverter {
 
         //校验签名
         String token = HttpKit.getRequest().getHeader(jwtProperties.getHeader()).substring(7);
+        //token分为三部分，中间的 payload 放入了claim的map
         String md5KeyFromToken = jwtTokenUtil.getMd5KeyFromToken(token);
 
         String object = baseTransferEntity.getObject();
         String json = dataSecurityAction.unlock(object);
+
+        //Base64转码后的Object和randomKey 用MD5处理 产生一个签名值
         String encrypt = MD5Util.encrypt(object + md5KeyFromToken);
 
         if (encrypt.equals(baseTransferEntity.getSign())) {

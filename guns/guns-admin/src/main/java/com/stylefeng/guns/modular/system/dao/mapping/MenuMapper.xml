@@ -5,7 +5,7 @@
 	<!-- 通用查询映射结果 -->
 	<resultMap id="BaseResultMap" type="com.stylefeng.guns.modular.system.model.Menu">
 		<id column="id" property="id" />
-		<result column="code" property="code" />
+		<result column="status" property="status" />
 		<result column="pcode" property="pcode" />
 		<result column="pcodes" property="pcodes" />
 		<result column="name" property="name" />
@@ -20,7 +20,7 @@
 	</resultMap>
 
     <sql id="Base_Column_List">
-        id, code, pcode, name, icon, url, num, levels,pcodes,
+        id, status, pcode, name, icon, url, num, levels,pcodes,
         tips, status,isopen,ismenu
     </sql>
 
@@ -30,7 +30,7 @@
         from sys_menu
         where status = 1
         <if test="condition != null and condition != ''">
-            and (name like CONCAT('%',#{condition},'%') or code like CONCAT('%',#{condition},'%'))
+            and (name like CONCAT('%',#{condition},'%') or status like CONCAT('%',#{condition},'%'))
         </if>
         <if test="level != null and level != ''">
             and levels = #{level}
