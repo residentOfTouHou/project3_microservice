@@ -68,4 +68,5 @@ public class JwtProperties {
     public void setMd5Key(String md5Key) {
         this.md5Key = md5Key;
     }
+
 }

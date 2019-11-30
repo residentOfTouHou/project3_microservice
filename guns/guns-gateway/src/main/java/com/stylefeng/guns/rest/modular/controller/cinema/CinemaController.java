@@ -12,8 +12,8 @@ import org.springframework.web.bind.annotation.RestController;
  * @date 2019/11/27
  * @time 20:26
  */
-@RestController
-@RequestMapping("cinema")
+//@RestController
+//@RequestMapping("cinema")
 public class CinemaController {
 
     @Reference(interfaceClass = CinemaService.class)

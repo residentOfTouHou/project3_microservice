@@ -14,8 +14,8 @@ import org.springframework.web.bind.annotation.RestController;
  * @time 19:40
  */
 
-@RestController
-@RequestMapping("film")
+//@RestController
+//@RequestMapping("film")
 public class FilmController {
 
     @Reference(interfaceClass = FilmService.class)
