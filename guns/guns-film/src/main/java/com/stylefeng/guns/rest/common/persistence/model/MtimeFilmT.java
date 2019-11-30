@@ -27,7 +27,7 @@ public class MtimeFilmT extends Model<MtimeFilmT> {
      * 主键编号
      */
     @TableId(value = "UUID", type = IdType.AUTO)
-    private Integer uuid;
+    private Integer filmId;
     /**
      * 影片名称
      */
@@ -92,11 +92,11 @@ public class MtimeFilmT extends Model<MtimeFilmT> {
 
 
     public Integer getUuid() {
-        return uuid;
+        return filmId;
     }
 
     public void setUuid(Integer uuid) {
-        this.uuid = uuid;
+        this.filmId = uuid;
     }
 
     public String getFilmName() {
@@ -197,13 +197,13 @@ public class MtimeFilmT extends Model<MtimeFilmT> {
 
     @Override
     protected Serializable pkVal() {
-        return this.uuid;
+        return this.filmId;
     }
 
     @Override
     public String toString() {
         return "MtimeFilmT{" +
-        "uuid=" + uuid +
+        "uuid=" + filmId +
         ", filmName=" + filmName +
         ", filmType=" + filmType +
         ", imgAddress=" + imgAddress +
