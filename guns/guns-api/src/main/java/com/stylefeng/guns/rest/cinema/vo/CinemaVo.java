@@ -26,4 +26,5 @@ public class CinemaVo implements Serializable {
     private String cinemaAddress;
 
     private Integer minimumPrice;
+
 }

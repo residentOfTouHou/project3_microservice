@@ -37,7 +37,7 @@ public class AuthController {
     @Autowired
     private RedisTemplate redisTemplate;
 
-    @Reference(interfaceClass = UserService.class)
+    @Reference(interfaceClass = UserService.class, check = false)
     UserService userService;
 
     @Resource(name = "simpleValidator")
@@ -49,29 +49,29 @@ public class AuthController {
         //boolean validate = reqValidator.validate(authRequest);
         //验证用户名和密码  返回0代表校验正确 1代表错误 -1代表异常
         String password2 = MD5Util.encrypt(password);
-        Integer result = userService.login(userName,password2);
+        Integer result = userService.login(userName, password2);
         if (result == 0) {
             final String randomKey = jwtTokenUtil.getRandomKey();
             final String token = jwtTokenUtil.generateToken(authRequest.getUserName(), randomKey);
 
             //将token和用户信息存储到redis中 并设置过期时间
-            redisTemplate.opsForValue().set(token,userName);
-            redisTemplate.expire(token,5 * 60, TimeUnit.SECONDS);
+            redisTemplate.opsForValue().set(token, userName);
+            redisTemplate.expire(token, 5 * 60, TimeUnit.SECONDS);
 
-            Map<String,String> map = new HashMap<>();
-            map.put("randomKey",randomKey);
-            map.put("token",token);
+            Map<String, String> map = new HashMap<>();
+            map.put("randomKey", randomKey);
+            map.put("token", token);
 
             GunsVo gunsVo = new GunsVo();
             gunsVo.setStatus(0);
             gunsVo.setData(map);
             return gunsVo;
             // return ResponseEntity.ok(new AuthResponse(token, randomKey));
-        } else if(result == 1){
-            return new GunsVo(1,"用户名或密码错误");
+        } else if (result == 1) {
+            return new GunsVo(1, "用户名或密码错误");
             //throw new GunsException(BizExceptionEnum.AUTH_REQUEST_ERROR);
-        }else{
-            return new GunsVo(999,"系统出现异常，请联系管理员");
+        } else {
+            return new GunsVo(999, "系统出现异常，请联系管理员");
         }
     }
 }
