@@ -54,10 +54,10 @@ public class UserServiceImpl implements UserService {
         String username = user.getUsername();
         List<MtimeUserT> userTList = mtimeUserTMapper.selectList(new EntityWrapper<MtimeUserT>().eq("user_name", username));
         //用户已经存在
-        if(!CollectionUtils.isEmpty(userTList)){
-            return new GunsVo(1,"用户已存在");
-        }
         try{
+            if(!CollectionUtils.isEmpty(userTList)){
+                return new GunsVo(1,"用户已存在");
+            }
             Integer result = mtimeUserTMapper.insert(mtimeUserT);
             return new GunsVo(0,"注册成功");
         }catch (Exception e){
