@@ -11,5 +11,5 @@ public class CatInfoVO implements Serializable {
 
     private String catName;
 
-    private Boolean isActive;
+    private Boolean active;
 }

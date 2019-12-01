@@ -12,5 +12,5 @@ public class YearInfoVO implements Serializable {
 
     private String yearName;
 
-    private Boolean isActive;
+    private Boolean active;
 }
