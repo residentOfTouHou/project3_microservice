@@ -37,11 +37,8 @@ public class AuthController {
     @Autowired
     private RedisTemplate redisTemplate;
 
-<<<<<<< HEAD
     @Reference(interfaceClass = UserService.class, check = false)
-=======
-    @Reference(interfaceClass = UserService.class,check = false)
->>>>>>> cb163589c4a5164d6225c8930191bd0d21933170
+
     UserService userService;
 
     @Resource(name = "simpleValidator")
@@ -51,11 +48,9 @@ public class AuthController {
     //public ResponseEntity<?> createAuthenticationToken(AuthRequest authRequest,String userName,String password) {
     public GunsVo createAuthenticationToken(AuthRequest authRequest, String userName, String password) {
         //验证用户名和密码  返回0代表校验正确 1代表错误 -1代表异常
-<<<<<<< HEAD
+
         String password2 = MD5Util.encrypt(password);
-        Integer result = userService.login(userName, password2);
-=======
-        String password2 = null;
+
         //判空
         if(userName != null && password != null){
            password2 = MD5Util.encrypt(password);
@@ -63,19 +58,14 @@ public class AuthController {
             return new GunsVo(999,"账号密码不能为空！");
         }
         Integer result = userService.login(userName,password2);
->>>>>>> cb163589c4a5164d6225c8930191bd0d21933170
+
         if (result == 0) {
             final String randomKey = jwtTokenUtil.getRandomKey();
             final String token = jwtTokenUtil.generateToken(authRequest.getUserName(), randomKey);
 
             //将token和用户信息存储到redis中 并设置过期时间
-<<<<<<< HEAD
-            redisTemplate.opsForValue().set(token, userName);
-            redisTemplate.expire(token, 5 * 60, TimeUnit.SECONDS);
-=======
             redisTemplate.opsForValue().set(token,userName);
             redisTemplate.expire(token,100 * 60, TimeUnit.SECONDS);
->>>>>>> cb163589c4a5164d6225c8930191bd0d21933170
 
             Map<String, String> map = new HashMap<>();
             map.put("randomKey", randomKey);
