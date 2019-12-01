@@ -44,7 +44,7 @@ public class CinemaServiceImpl implements CinemaService {
     MtimeHallDictTMapper mtimeHallDictTMapper;
 
     @Override
-    public CinemasRespVo getCinemas(Integer brandId, Integer hallType, Integer areaId, Integer pageSize, Integer nowPage) {
+    public CinemasRespVo getCinemas(Integer brandId, Integer hallType, Integer areaId, Integer pageSize, Integer nowPage) throws NullPointerException{
         EntityWrapper<MtimeCinemaT> entityWrapper = new EntityWrapper<>();
         if(brandId!=99){
             entityWrapper.eq("brand_id",brandId);
@@ -80,6 +80,7 @@ public class CinemaServiceImpl implements CinemaService {
             cinemasRespVo.setTotalPage(0);
         }
         cinemasRespVo.setStatus(0);
+        cinemasRespVo.setImgPre("http://img.meetingshop.cn/");
         return cinemasRespVo;
     }
 

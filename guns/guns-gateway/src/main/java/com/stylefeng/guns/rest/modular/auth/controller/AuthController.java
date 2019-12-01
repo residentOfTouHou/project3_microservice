@@ -37,7 +37,7 @@ public class AuthController {
     @Autowired
     private RedisTemplate redisTemplate;
 
-    @Reference(interfaceClass = UserService.class)
+    @Reference(interfaceClass = UserService.class,check = false)
     UserService userService;
 
     @Resource(name = "simpleValidator")
@@ -48,6 +48,7 @@ public class AuthController {
     public GunsVo createAuthenticationToken(AuthRequest authRequest, String userName, String password) {
         //boolean validate = reqValidator.validate(authRequest);
         //验证用户名和密码  返回0代表校验正确 1代表错误 -1代表异常
+
         String password2 = MD5Util.encrypt(password);
         Integer result = userService.login(userName,password2);
         if (result == 0) {
