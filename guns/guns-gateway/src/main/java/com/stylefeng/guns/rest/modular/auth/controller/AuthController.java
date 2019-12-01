@@ -46,10 +46,14 @@ public class AuthController {
     @RequestMapping(value = "${jwt.auth-path}")
     //public ResponseEntity<?> createAuthenticationToken(AuthRequest authRequest,String userName,String password) {
     public GunsVo createAuthenticationToken(AuthRequest authRequest, String userName, String password) {
-        //boolean validate = reqValidator.validate(authRequest);
         //验证用户名和密码  返回0代表校验正确 1代表错误 -1代表异常
-
-        String password2 = MD5Util.encrypt(password);
+        String password2 = null;
+        //判空
+        if(userName != null && password != null){
+           password2 = MD5Util.encrypt(password);
+        }else {
+            return new GunsVo(999,"账号密码不能为空！");
+        }
         Integer result = userService.login(userName,password2);
         if (result == 0) {
             final String randomKey = jwtTokenUtil.getRandomKey();
@@ -57,7 +61,7 @@ public class AuthController {
 
             //将token和用户信息存储到redis中 并设置过期时间
             redisTemplate.opsForValue().set(token,userName);
-            redisTemplate.expire(token,5 * 60, TimeUnit.SECONDS);
+            redisTemplate.expire(token,100 * 60, TimeUnit.SECONDS);
 
             Map<String,String> map = new HashMap<>();
             map.put("randomKey",randomKey);

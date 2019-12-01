@@ -21,7 +21,9 @@ public class FilmInfoVO implements Serializable {
 
     private Integer expectNum;
 
-    private Date showTime;
+    private String showTime;
+
+    private String score;
 
     private Integer boxNum;
 

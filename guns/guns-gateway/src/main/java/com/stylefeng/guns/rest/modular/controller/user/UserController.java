@@ -33,5 +33,10 @@ public class UserController {
         return gunsVo;
     }
 
+    @RequestMapping("logout")
+    public GunsVo userLogout(){
+        return new GunsVo(0,"成功退出");
+    }
+
 
 }
