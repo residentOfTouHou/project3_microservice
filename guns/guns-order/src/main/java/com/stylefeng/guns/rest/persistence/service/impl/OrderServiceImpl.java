@@ -44,9 +44,6 @@ public class OrderServiceImpl implements OrderService {
     @Autowired
     RedisTemplate redisTemplate;
 
-    @Autowired
-    JwtProperties jwtProperties;
-
     /**
      * 验证售出的票是否为真
      * @return
@@ -103,7 +100,7 @@ public class OrderServiceImpl implements OrderService {
      * 创建订单
      */
     @Override
-    public OrderVo saveOrderInfo(String filedId, String soldSeats, String seatsName, HttpServletRequest request) {
+    public OrderVo saveOrderInfo(String filedId, String soldSeats, String seatsName, String userName) {
         MoocOrderT moocOrderT = new MoocOrderT();
         MtimeFieldT mtimeFieldT = mtimeFieldTMapper.selectById(filedId);
         moocOrderT.setCinemaId(mtimeFieldT.getCinemaId());
@@ -128,17 +125,16 @@ public class OrderServiceImpl implements OrderService {
         Date orderTime = new Date();
         moocOrderT.setOrderTime(orderTime);
 
-        final String requestHeader = request.getHeader(jwtProperties.getHeader());
-        String authToken = null;
-        if (requestHeader != null && requestHeader.startsWith("Bearer ")) {
-            authToken = requestHeader.substring(7);
-        }
-        String userName = (String) redisTemplate.opsForValue().get(authToken);
+
         List<MtimeUserT> user_name = mtimeUserTMapper.selectList(new EntityWrapper<MtimeUserT>().eq("user_name", userName));
-        Integer uuid = user_name.get(0).getUuid();
-        moocOrderT.setOrderUser(uuid);
-        Integer insert = moocOrderTMapper.insert(moocOrderT);
-        Integer orderId = moocOrderTMapper.getLastInsertId();
+        Integer userId = user_name.get(0).getUuid();
+        moocOrderT.setOrderUser(userId);
+        moocOrderT.setOrderStatus(0);
+        moocOrderTMapper.insert(moocOrderT);
+        List<MoocOrderT> moocOrderTS = moocOrderTMapper.selectList(new EntityWrapper<MoocOrderT>()
+                .eq("seats_ids", soldSeats).eq("order_user", userId).eq("order_status",0));
+        String orderID = moocOrderTS.get(0).getUuid();
+        Integer orderId = Integer.valueOf(orderID);
 
         OrderVo orderVo = new OrderVo();
         orderVo.setOrderId(orderId);

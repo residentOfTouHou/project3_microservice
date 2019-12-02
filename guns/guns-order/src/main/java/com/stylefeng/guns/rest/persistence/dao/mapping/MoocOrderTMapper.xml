@@ -17,7 +17,9 @@
         <result column="order_status" property="orderStatus" />
     </resultMap>
 
-    <select id="getLastInsertId" resultType="int">
-        select LAST_INSERT_ID() from mooc_order_t
-    </select>
+    <insert id="insertAndReturnId" parameterType="com.stylefeng.guns.rest.persistence.model.MoocOrderT" useGeneratedKeys="true" keyProperty="uuid" keyColumn="UUID">
+        insert into mooc_order_t (cinema_id, field_id, film_id, seats_ids, seats_name, film_price, order_price,order_time, order_user, order_status)
+         values (#{cinemaId}, #{fieldId},#{filmId},#{seatsIds},#{seatsName},
+         #{filmPrice} , #{orderTime}, #{orderUser},#{orderStatus})
+    </insert>
 </mapper>

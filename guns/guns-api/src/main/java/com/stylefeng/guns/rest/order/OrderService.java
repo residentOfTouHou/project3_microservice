@@ -14,7 +14,7 @@ public interface OrderService {
     boolean isNotSoldSeats(String fieldId,String seats);
 
     //创建订单信息
-    OrderVo saveOrderInfo(String filedId, String soldSeats, String seatsName, HttpServletRequest request);
+    OrderVo saveOrderInfo(String filedId, String soldSeats, String seatsName, String userName);
 
     //获取当前用户的订单信息
     //Page<OrderVo> getOrderByUserId(Integer userId,Page<OrderVo> page);

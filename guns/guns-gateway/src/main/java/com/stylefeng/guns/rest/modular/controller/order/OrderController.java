@@ -2,10 +2,13 @@ package com.stylefeng.guns.rest.modular.controller.order;
 
 import com.alibaba.dubbo.config.annotation.Reference;
 import com.stylefeng.guns.rest.common.RespEnum;
+import com.stylefeng.guns.rest.config.properties.JwtProperties;
 import com.stylefeng.guns.rest.order.OrderService;
 import com.stylefeng.guns.rest.order.vo.OrderVo;
 import com.stylefeng.guns.rest.util.RespBeanUtil;
 import com.stylefeng.guns.rest.vo.GunsVo;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -17,6 +20,12 @@ public class OrderController {
 
     @Reference(interfaceClass = OrderService.class,check = false)
     OrderService orderService;
+
+    @Autowired
+    RedisTemplate redisTemplate;
+
+    @Autowired
+    JwtProperties jwtProperties;
 
     @RequestMapping("buyTickets")
     public GunsVo buyTickets(String fieldId, String soldSeats, String seatsName, HttpServletRequest request){
@@ -33,7 +42,15 @@ public class OrderController {
             return RespBeanUtil.beanUtil(RespEnum.SEAT_BUYED.getStatus(),RespEnum.SEAT_BUYED.getMsg(),null);
         }
         //创建订单
-        OrderVo orderVo = orderService.saveOrderInfo(fieldId, soldSeats, seatsName, request);
+        final String requestHeader = request.getHeader(jwtProperties.getHeader());
+        String authToken = null;
+        if (requestHeader != null && requestHeader.startsWith("Bearer ")) {
+            authToken = requestHeader.substring(7);
+        }
+        //校验token抛出异常
+        String userName = (String) redisTemplate.opsForValue().get(authToken);
+
+        OrderVo orderVo = orderService.saveOrderInfo(fieldId, soldSeats, seatsName, userName);
         return RespBeanUtil.beanUtil(RespEnum.NORMAL_RESP.getStatus(),"",orderVo);
     }
 }
