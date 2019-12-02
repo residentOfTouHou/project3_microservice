@@ -17,11 +17,7 @@ import java.util.Map;
  */
 public interface FilmService {
 
-    List<FilmsVo> getHotFilms(FilmRequestVO filmRequestVO);
-
-    List<FilmsVo> getSoonFilms(FilmRequestVO filmRequestVO);
-
-    List<FilmsVo> getClassicalFilms(FilmRequestVO filmRequestVO);
-
     Map<String,Object> getSpecificFilmInfo(Integer filmId);
+
+    List<FilmsVo> getFilms(FilmRequestVO filmRequestVO);
 }

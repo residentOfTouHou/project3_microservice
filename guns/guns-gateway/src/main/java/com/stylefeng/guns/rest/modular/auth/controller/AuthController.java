@@ -37,8 +37,7 @@ public class AuthController {
     @Autowired
     private RedisTemplate redisTemplate;
 
-    @Reference(interfaceClass = UserService.class, check = false)
-
+    @Reference(interfaceClass = UserService.class,check = false)
     UserService userService;
 
     @Resource(name = "simpleValidator")

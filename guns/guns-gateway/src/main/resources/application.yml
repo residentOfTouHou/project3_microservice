@@ -1,5 +1,5 @@
 rest:
-  auth-open: false #jwt鉴权机制是否开启(true或者false)
+  auth-open: true #jwt鉴权机制是否开启(true或者false)
   sign-open: false #签名机制是否开启(true或false)
 
 jwt:
@@ -8,13 +8,14 @@ jwt:
   expiration: 604800      #7天 单位:秒
   auth-path: auth         #认证请求的路径
   md5-key: randomKey      #md5加密混淆key
-  ignore-url: /auth,/user/check,/user/register,/user/logout,/film/index,/film/getIndex,/film/getConditionList,/cinema/getCinemas,/cinema/getCondition
+  ignore-url: /auth,/user/check,/user/register,/user/logout,/film,/cinema/getCinemas,/cinema/getCondition
+
 
 server:
   port: 8080 #项目端口
 
 mybatis-plus:
-  mapplocations: classpath*:com/stylefeng/guns/rest/**/mapping/*.xml
+  mapper-locations: classpath*:com/stylefeng/guns/rest/**/mapping/*.xml
   typeAliasesPackage: com.stylefeng.guns.rest.common.persistence.model
   global-config:
     id-type: 0  #0:数据库ID自增   1:用户输入id  2:全局唯一id(IdWorker)  3:全局唯一ID(uuid)
@@ -29,7 +30,7 @@ mybatis-plus:
 
 spring:
   datasource:
-      url: jdbc:mysql://localhost:3306/guns_rest?autoReconnect=true&useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=CONVERT_To_Null&serverTimezone=GMT%2B8
+      url: jdbc:mysql://localhost:3306/guns?autoReconnect=true&useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=CONVERT_To_Null&serverTimezone=GMT%2B8
       username: root
       password: 123456
       filters: log4j,wall,mergeStat
