@@ -6,7 +6,7 @@ import java.io.Serializable;
 import java.util.Date;
 
 @Data
-public class OrderVo implements Serializable {
+public class OrderVo3 implements Serializable {
     private static final long serialVersionUID = 5049619968964199180L;
     /**
      * orderId : 479

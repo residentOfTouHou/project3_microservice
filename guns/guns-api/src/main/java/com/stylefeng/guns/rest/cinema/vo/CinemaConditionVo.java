@@ -18,4 +18,12 @@ public class CinemaConditionVo implements Serializable {
     private Object data;
 
     private Integer status;
+
+    private String nowPage;
+
+    private String imgPre;
+
+    private String msg;
+
+    private String totalPage;
 }

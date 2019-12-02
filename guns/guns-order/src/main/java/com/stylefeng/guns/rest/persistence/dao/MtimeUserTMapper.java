@@ -9,7 +9,7 @@ import com.stylefeng.guns.rest.persistence.model.MtimeUserT;
  * </p>
  *
  * @author stylefeng
- * @since 2019-11-27
+ * @since 2019-12-02
  */
 public interface MtimeUserTMapper extends BaseMapper<MtimeUserT> {
 

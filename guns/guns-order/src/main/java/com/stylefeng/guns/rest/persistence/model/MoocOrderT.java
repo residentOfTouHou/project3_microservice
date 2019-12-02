@@ -4,6 +4,7 @@ import java.util.Date;
 import com.baomidou.mybatisplus.annotations.TableField;
 import com.baomidou.mybatisplus.activerecord.Model;
 import com.baomidou.mybatisplus.annotations.TableName;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import java.io.Serializable;
 
 /**
@@ -12,7 +13,7 @@ import java.io.Serializable;
  * </p>
  *
  * @author stylefeng
- * @since 2019-12-01
+ * @since 2019-12-02
  */
 @TableName("mooc_order_t")
 public class MoocOrderT extends Model<MoocOrderT> {
@@ -63,6 +64,7 @@ public class MoocOrderT extends Model<MoocOrderT> {
      * 下单时间
      */
     @TableField("order_time")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date orderTime;
     /**
      * 下单人

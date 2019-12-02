@@ -1,19 +1,20 @@
 package com.stylefeng.guns.rest.order;
 
-import com.alibaba.dubbo.container.page.Page;
+import com.stylefeng.guns.rest.order.vo.OrderVo;
 import com.stylefeng.guns.rest.vo.GunsVo;
-import com.stylefeng.guns.rest.vo.OrderVo;
+
+
 
 public interface OrderService {
 
     //验证售出的票是否为真
-    boolean isTrueSeats(String fieldId,String seats);
+    Integer isTrueSeats(String fieldId,String seats);
 
     //已经销售的座位里检查有没有这些座位（防止卖重）
-    //boolean isNotSoldSeats(String fieldId,String seats);
+    boolean isNotSoldSeats(String fieldId,String seats);
 
     //创建订单信息
-    //OrderVo saveOrderInfo(Integer filedId,String soldSeats,String seatsName,Integer userId);
+    OrderVo saveOrderInfo(String filedId, String soldSeats, String seatsName, String userName);
 
     //获取当前用户的订单信息
     GunsVo getOrderInfoByUserName(String username, Integer nowPage, Integer pageSize);
