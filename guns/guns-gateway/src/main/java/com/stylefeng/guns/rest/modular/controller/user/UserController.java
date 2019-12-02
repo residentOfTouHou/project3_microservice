@@ -57,7 +57,7 @@ public class UserController {
             baseVo.setStatus(0);
             baseVo.setMsg("成功退出");
         }else{
-            baseVo.setStatus(999);
+            baseVo.setStatus(0);
             baseVo.setMsg("系统出现异常，请联系管理员");
         }
         return baseVo;
