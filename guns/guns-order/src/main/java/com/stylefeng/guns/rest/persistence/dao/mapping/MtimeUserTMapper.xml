@@ -19,4 +19,5 @@
         <result column="begin_time" property="beginTime" />
         <result column="update_time" property="updateTime" />
     </resultMap>
+
 </mapper>

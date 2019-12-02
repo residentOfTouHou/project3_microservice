@@ -1,5 +1,5 @@
 rest:
-  auth-open: true #jwt鉴权机制是否开启(true或者false)
+  auth-open: false #jwt鉴权机制是否开启(true或者false)
   sign-open: false #签名机制是否开启(true或false)
 
 jwt:
@@ -37,7 +37,7 @@ spring:
     registry: zookeeper://localhost:2181
     protocol:
       name: dubbo
-      port: 20900 #暴露端口
+      port: 20910 #暴露端口
   application:
     name: guns-user
 
