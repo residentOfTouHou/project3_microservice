@@ -1,6 +1,8 @@
 package com.stylefeng.guns.rest.order;
 
 import com.alibaba.dubbo.container.page.Page;
+import com.stylefeng.guns.rest.vo.GunsVo;
+import com.stylefeng.guns.rest.vo.OrderVo;
 
 public interface OrderService {
 
@@ -14,8 +16,8 @@ public interface OrderService {
     //OrderVo saveOrderInfo(Integer filedId,String soldSeats,String seatsName,Integer userId);
 
     //获取当前用户的订单信息
-    //Page<OrderVo> getOrderByUserId(Integer userId,Page<OrderVo> page);
+    GunsVo getOrderInfoByUserName(String username, Integer nowPage, Integer pageSize);
 
     //根据FieldId获取所有已经销售的座位编号(给影院服务提供的接口)
-    //String getSoldSeatsByFileId(Integer fileId);
+    String getSoldSeatsByFileId(Integer fileId);
 }
