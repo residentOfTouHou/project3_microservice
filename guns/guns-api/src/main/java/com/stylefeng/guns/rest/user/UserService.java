@@ -1,6 +1,8 @@
 package com.stylefeng.guns.rest.user;
 
+import com.stylefeng.guns.rest.user.vo.BaseVo;
 import com.stylefeng.guns.rest.user.vo.RequestUser;
+import com.stylefeng.guns.rest.user.vo.UserInfoVo;
 import com.stylefeng.guns.rest.vo.GunsVo;
 
 /**
@@ -17,4 +19,8 @@ public interface UserService {
     GunsVo check(String username);
 
     Integer login(String userName, String password);
+
+    BaseVo getUserInfoByUsername(String userName);
+
+    BaseVo updateUser(UserInfoVo userInfoVo);
 }

@@ -1,6 +1,7 @@
 package com.stylefeng.guns.rest.persistence.model;
 
 import java.util.Date;
+
 import com.baomidou.mybatisplus.annotations.TableField;
 import com.baomidou.mybatisplus.activerecord.Model;
 import com.baomidou.mybatisplus.annotations.TableName;
@@ -12,8 +13,9 @@ import java.io.Serializable;
  * <p>
  * 订单信息表
  * </p>
+ * <p>
  *
- * @author stylefeng
+ * @author shengyang
  * @since 2019-12-02
  */
 @TableName("mooc_order_t")
@@ -175,17 +177,17 @@ public class MoocOrderT extends Model<MoocOrderT> {
     @Override
     public String toString() {
         return "MoocOrderT{" +
-        "uuid=" + uuid +
-        ", cinemaId=" + cinemaId +
-        ", fieldId=" + fieldId +
-        ", filmId=" + filmId +
-        ", seatsIds=" + seatsIds +
-        ", seatsName=" + seatsName +
-        ", filmPrice=" + filmPrice +
-        ", orderPrice=" + orderPrice +
-        ", orderTime=" + orderTime +
-        ", orderUser=" + orderUser +
-        ", orderStatus=" + orderStatus +
-        "}";
+                "uuid=" + uuid +
+                ", cinemaId=" + cinemaId +
+                ", fieldId=" + fieldId +
+                ", filmId=" + filmId +
+                ", seatsIds=" + seatsIds +
+                ", seatsName=" + seatsName +
+                ", filmPrice=" + filmPrice +
+                ", orderPrice=" + orderPrice +
+                ", orderTime=" + orderTime +
+                ", orderUser=" + orderUser +
+                ", orderStatus=" + orderStatus +
+                "}";
     }
 }

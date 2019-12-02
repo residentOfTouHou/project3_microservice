@@ -18,4 +18,8 @@ public class BaseRespVo implements Serializable {
     private Object data;
 
     private Integer status;
+
+    private String imgPre;
+
+    private String msg;
 }
