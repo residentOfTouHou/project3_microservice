@@ -22,7 +22,7 @@ public class CinemasRespVo implements Serializable {
 
     private List<CinemaVo> data;
 
-    //private String imgPre;
+    private String imgPre;
 
     private String msg;
 

@@ -17,6 +17,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.concurrent.TimeUnit;
 
 /**
  * 对客户端请求的jwt token验证过滤器
@@ -51,50 +52,23 @@ public class AuthFilter extends OncePerRequestFilter {
                 return;
             }
         }
-
-//        if (request.getServletPath().equals("/" + jwtProperties.getAuthPath())) {
-//            chain.doFilter(request, response);
-//            return;
-//        }
-
-        //不是的话就判断token是否过期
+        //不是需要放行的url的话就判断token是否过期
         final String requestHeader = request.getHeader(jwtProperties.getHeader());
         String authToken = null;
         if (requestHeader != null && requestHeader.startsWith("Bearer ")) {
             authToken = requestHeader.substring(7);
 
-            //用Token去redis中验证是否过期
+            //用token去redis中验证是否过期
             Object o = redisTemplate.opsForValue().get(authToken);
             if(o == null){
                 //Token过期
                 RenderUtil.renderJson(response, new ErrorTip(BizExceptionEnum.TOKEN_EXPIRED.getCode(), BizExceptionEnum.TOKEN_EXPIRED.getMessage()));
                 return;
             }
-            //没过期返回 username
+            //没过期返回 username 并刷新token过期时间
             String userName = (String) o;
             chain.doFilter(request, response);
-
-           /* 原来的验证方法
-           //验证token是否过期,包含了验证jwt是否正确
-            try {
-                boolean flag = jwtTokenUtil.isTokenExpired(authToken);
-                if (flag) {
-                    RenderUtil.renderJson(response, new ErrorTip(BizExceptionEnum.TOKEN_EXPIRED.getCode(), BizExceptionEnum.TOKEN_EXPIRED.getMessage()));
-                    return;
-                }
-            } catch (JwtException e) {
-                //有异常就是token解析失败
-                RenderUtil.renderJson(response, new ErrorTip(BizExceptionEnum.TOKEN_ERROR.getCode(), BizExceptionEnum.TOKEN_ERROR.getMessage()));
-                return;
-            }
-        } else {
-            //header没有带Bearer字段
-            RenderUtil.renderJson(response, new ErrorTip(BizExceptionEnum.TOKEN_ERROR.getCode(), BizExceptionEnum.TOKEN_ERROR.getMessage()));
-            return;
-        }
-
-        chain.doFilter(request, response);
-    }*/
+            redisTemplate.expire(authToken,100 * 60, TimeUnit.SECONDS);
         }
         else {
             RenderUtil.renderJson(response, new ErrorTip(BizExceptionEnum.TOKEN_ERROR.getCode(), BizExceptionEnum.TOKEN_ERROR.getMessage()));
