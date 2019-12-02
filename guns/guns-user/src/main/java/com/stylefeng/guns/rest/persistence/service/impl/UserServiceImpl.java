@@ -6,7 +6,9 @@ import com.stylefeng.guns.core.util.MD5Util;
 import com.stylefeng.guns.rest.persistence.dao.MtimeUserTMapper;
 import com.stylefeng.guns.rest.persistence.model.MtimeUserT;
 import com.stylefeng.guns.rest.user.UserService;
+import com.stylefeng.guns.rest.user.vo.BaseVo;
 import com.stylefeng.guns.rest.user.vo.RequestUser;
+import com.stylefeng.guns.rest.user.vo.UserInfoVo;
 import com.stylefeng.guns.rest.user.vo.UserVo;
 import com.stylefeng.guns.rest.vo.GunsVo;
 import org.springframework.beans.BeanUtils;
@@ -101,6 +103,88 @@ public class UserServiceImpl implements UserService {
             }
         }catch (Exception e){
             return -1;
+        }
+    }
+
+    @Override
+    public BaseVo getUserInfoByUsername(String usernameFromToken) {
+        BaseVo baseVo = new BaseVo();
+        EntityWrapper<MtimeUserT> mtimeUserTEntityWrapper = new EntityWrapper<>();
+        mtimeUserTEntityWrapper.eq("user_name", usernameFromToken);
+        List<MtimeUserT> mtimeUserTS = mtimeUserTMapper.selectList(mtimeUserTEntityWrapper);
+        if (mtimeUserTS.size() != 1) {
+            baseVo.setStatus(999);
+            baseVo.setMsg("系统出现异常，请联系管理员");
+            return baseVo;
+        } else {
+            MtimeUserT user = mtimeUserTS.get(0);
+            UserInfoVo userInfo = new UserInfoVo();
+            userInfo.setUuid(user.getUuid());
+            userInfo.setUsername(user.getUserName());
+            userInfo.setNickname(user.getNickName());
+            userInfo.setEmail(user.getEmail());
+            userInfo.setPhone(user.getUserPhone());
+            userInfo.setSex(user.getUserSex());
+            userInfo.setBirthday(user.getBirthday());
+            userInfo.setLifeState(user.getLifeState());
+            userInfo.setBiography(user.getBiography());
+            userInfo.setHeadAddress(user.getAddress());
+            userInfo.setCreateTime(user.getBeginTime().getTime());
+            userInfo.setUpdateTime(user.getUpdateTime().getTime());
+            baseVo.setStatus(0);
+            baseVo.setData(userInfo);
+
+            return baseVo;
+        }
+    }
+
+    @Override
+    public BaseVo updateUser(UserInfoVo userInfoVo) {
+        BaseVo baseVo = new BaseVo();
+        MtimeUserT userT = new MtimeUserT();
+        if (userInfoVo.getUuid() != null) {
+            userT.setUuid(userInfoVo.getUuid());
+
+            if (userInfoVo.getNickname() != null) {
+                userT.setNickName(userInfoVo.getNickname());
+            }
+            if (userInfoVo.getSex() != null) {
+                userT.setUserSex(userInfoVo.getSex());
+            }
+            if (userInfoVo.getBirthday() != null) {
+                userT.setBirthday(userInfoVo.getBirthday());
+            }
+            if (userInfoVo.getEmail() != null) {
+                userT.setEmail(userInfoVo.getEmail());
+            }
+            if (userInfoVo.getPhone() != null) {
+                userT.setUserPhone(userInfoVo.getPhone());
+            }
+            if (userInfoVo.getAddress() != null) {
+                userT.setAddress(userInfoVo.getAddress());
+            }
+            if (userInfoVo.getBiography() != null) {
+                userT.setBiography(userInfoVo.getBiography());
+            }
+            if (userInfoVo.getLifeState() != null) {
+                userT.setLifeState(userInfoVo.getLifeState());
+            }
+            userT.setUpdateTime(new Date());
+        } else {
+            baseVo.setMsg("用户信息修改失败");
+            baseVo.setStatus(1);
+            return baseVo;
+        }
+        Integer integer = mtimeUserTMapper.updateById(userT);
+        if (integer == 1) {
+            baseVo.setStatus(0);
+            baseVo.setMsg("信息修改成功");
+            MtimeUserT userT1 = mtimeUserTMapper.selectById(userT);
+            return getUserInfoByUsername(userT1.getUserName());
+        } else {
+            baseVo.setMsg("用户信息修改失败");
+            baseVo.setStatus(1);
+            return baseVo;
         }
     }
 }
