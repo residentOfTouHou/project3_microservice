@@ -13,5 +13,5 @@ public class SourceInfoVO implements Serializable {
 
     private String sourceName;
 
-    private Boolean isActive;
+    private Boolean active;
 }

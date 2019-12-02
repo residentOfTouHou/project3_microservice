@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.stylefeng.guns.rest.common.persistence.dao.ActorMapper">
+
+    <resultMap id="actorsMap" type="com.stylefeng.guns.rest.common.persistence.model.Actors">
+        <result column="actor_name" property="directorName"/>
+        <result column="actor_img" property="imgAddress"/>
+        <result column="role_name" property="roleName"/>
+    </resultMap>
+
+    <select id="selectActors" resultMap="actorsMap">
+        select ac.actor_name,ac.actor_img,fa.role_name
+        from mtime_film_actor_t fa
+        left join mtime_actor_t ac
+        on fa.actor_id = ac.UUID
+        where film_id = #{filmId}
+    </select>
+
+    <select id="selectDirector" resultMap="actorsMap">
+        select ac.actor_name,ac.actor_img,fa.role_name
+        from mtime_film_actor_t fa
+        left join mtime_actor_t ac
+        on fa.actor_id = ac.UUID
+        where film_id = #{filmId}
+        and fa.actor_id = 1
+    </select>
+</mapper>

@@ -8,13 +8,13 @@ jwt:
   expiration: 604800      #7天 单位:秒
   auth-path: auth         #认证请求的路径
   md5-key: randomKey      #md5加密混淆key
-  ignore-url: /auth,/film/index
+  ignore-url: /auth,/film
 
 server:
   port: 8080 #项目端口
 
 mybatis-plus:
-  mapper-locations: classpath*:com/stylefeng/guns/rest/**/mapping/*.xml
+  mapplocations: classpath*:com/stylefeng/guns/rest/**/mapping/*.xml
   typeAliasesPackage: com.stylefeng.guns.rest.common.persistence.model
   global-config:
     id-type: 0  #0:数据库ID自增   1:用户输入id  2:全局唯一id(IdWorker)  3:全局唯一ID(uuid)

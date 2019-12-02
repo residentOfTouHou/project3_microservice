@@ -54,7 +54,7 @@ public class FilmCatServiceAPIImpl implements FilmCatServiceAPI {
 
             catInfoVO.setCatId(dictT.getUuid() + "");
             catInfoVO.setCatName(dictT.getShowName());
-            catInfoVO.setIsActive(false);
+            catInfoVO.setActive(false);
 
             catInfoVOS.add(catInfoVO);
         }
@@ -81,7 +81,7 @@ public class FilmCatServiceAPIImpl implements FilmCatServiceAPI {
 
             sourceInfoVO.setSourceId(dictT.getUuid() + "");
             sourceInfoVO.setSourceName(dictT.getShowName());
-            sourceInfoVO.setIsActive(false);
+            sourceInfoVO.setActive(false);
 
             sourceInfoVOS.add(sourceInfoVO);
         }
@@ -110,7 +110,7 @@ public class FilmCatServiceAPIImpl implements FilmCatServiceAPI {
 
             yearInfoVO.setYearId(dictT.getUuid() + "");
             yearInfoVO.setYearName(dictT.getShowName());
-            yearInfoVO.setIsActive(false);
+            yearInfoVO.setActive(false);
 
             yearInfoVOS.add(yearInfoVO);
         }
