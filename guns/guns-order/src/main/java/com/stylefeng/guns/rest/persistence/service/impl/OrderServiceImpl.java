@@ -12,4 +12,14 @@ public class OrderServiceImpl implements OrderService {
     public boolean isTrueSeats(String fieldId, String seats) {
         return false;
     }
+
+    @Override
+    public boolean isNotSoldSeats(String fieldId, String seats) {
+        return false;
+    }
+
+    @Override
+    public String getSoldSeatsByFileId(Integer fileId) {
+        return null;
+    }
 }
