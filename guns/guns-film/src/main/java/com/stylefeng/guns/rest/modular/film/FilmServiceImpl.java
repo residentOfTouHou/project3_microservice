@@ -38,6 +38,16 @@ public class FilmServiceImpl  implements FilmService {
     public List<FilmsVo> getFilms(FilmRequestVO filmRequestVO) {
         EntityWrapper<MtimeFilmT> filmsVoEntityWrapper = new EntityWrapper<>();
         filmsVoEntityWrapper.eq("film_status",filmRequestVO.getShowType());
+        if(filmRequestVO.getSourceId()!=99) {
+            filmsVoEntityWrapper.eq("film_source", filmRequestVO.getSourceId());
+        }
+        if(filmRequestVO.getCatId()!=99) {
+            String filmCats = String.valueOf(filmRequestVO.getCatId());
+            filmsVoEntityWrapper.like("film_cats",filmCats);
+        }
+        if(filmRequestVO.getYearId()!=99) {
+            filmsVoEntityWrapper.eq("film_date", filmRequestVO.getYearId());
+        }
         Page<MtimeFilmT> mtimeFilmTPage = new Page<>(filmRequestVO.getOffset(),filmRequestVO.getPageSize());
         List<MtimeFilmT> mtimeFilmTS = mtimeFilmTMapper.selectPage(mtimeFilmTPage,filmsVoEntityWrapper);
         List<FilmsVo> filmsVos = new ArrayList<>();
