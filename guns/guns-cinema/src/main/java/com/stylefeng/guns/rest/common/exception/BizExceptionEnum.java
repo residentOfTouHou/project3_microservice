@@ -15,7 +15,7 @@ public enum BizExceptionEnum implements ServiceExceptionEnum {
      */
     TOKEN_EXPIRED(700, "token过期"),
     TOKEN_ERROR(700, "token验证失败"),
-
+    TOKEN_FAILED(1001,"未登录"),
     /**
      * 签名异常
      */
