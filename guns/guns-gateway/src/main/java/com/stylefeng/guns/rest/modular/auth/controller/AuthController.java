@@ -58,7 +58,6 @@ public class AuthController {
             return new GunsVo(999,"账号密码不能为空！");
         }
         Integer result = userService.login(userName,password2);
-
         if (result == 0) {
             final String randomKey = jwtTokenUtil.getRandomKey();
             final String token = jwtTokenUtil.generateToken(authRequest.getUserName(), randomKey);
