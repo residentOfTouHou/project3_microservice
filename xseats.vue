@@ -92,7 +92,8 @@
                         soldSeats = soldSeats.split(',');
                         //nuxt脚手架会自动生成static文件夹，将json文件放在此目录下可以直接访问，如：('/4d.json')
                         //https://segmentfault.com/q/1010000013913258
-                        _this.readTextFile("/json/4dx.json", function (text) {
+                        let inputFile = res.data.hallInfo.seatFile.slice(5);
+                        _this.readTextFile("/json" + inputFile, function (text) {
                             res.data.hallInfo.seatFile = JSON.parse(text);
                             if (res.data.hallInfo.seatFile) {
                                 //卖掉的座添加一个isSold标识

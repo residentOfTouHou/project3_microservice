@@ -7,15 +7,15 @@ import org.springframework.stereotype.Controller;
 
 /**
  * <p>
- * 订单信息表 前端控制器
+ * 影片主表 前端控制器
  * </p>
  *
- * @author shengyang
+ * @author stylefeng
  * @since 2019-12-02
  */
 @Controller
-@RequestMapping("/moocOrderT")
-public class MoocOrderTController {
+@RequestMapping("/mtimeFilmInfoT")
+public class MtimeFilmInfoTController {
 
 }
 

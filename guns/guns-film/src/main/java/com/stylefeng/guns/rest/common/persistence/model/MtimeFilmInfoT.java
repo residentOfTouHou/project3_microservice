@@ -14,6 +14,7 @@ import java.io.Serializable;
  *
  * @author stylefeng
  * @since 2019-12-01
+ * @since 2019-12-02
  */
 @TableName("mtime_film_info_t")
 public class MtimeFilmInfoT extends Model<MtimeFilmInfoT> {

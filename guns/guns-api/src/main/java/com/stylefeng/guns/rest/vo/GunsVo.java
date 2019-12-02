@@ -12,6 +12,9 @@ public class GunsVo implements Serializable {
     private Integer status;
     private String msg;
     private Object data;
+    private Integer totalPage;
+    private Integer nowPage;
+    private Integer imgPre;
 
     public GunsVo() {
     }
