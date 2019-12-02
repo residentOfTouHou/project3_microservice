@@ -130,9 +130,11 @@ public class OrderServiceImpl implements OrderService {
         Integer userId = user_name.get(0).getUuid();
         moocOrderT.setOrderUser(userId);
         moocOrderT.setOrderStatus(0);
+        //可以考虑使用insert内嵌selectKey
         moocOrderTMapper.insert(moocOrderT);
-        List<MoocOrderT> moocOrderTS = moocOrderTMapper.selectList(new EntityWrapper<MoocOrderT>()
-                .eq("seats_ids", soldSeats).eq("order_user", userId).eq("order_status",0));
+        //缺少唯一标识
+        List<MoocOrderT> moocOrderTS = moocOrderTMapper.selectList(new EntityWrapper<MoocOrderT>().eq("seats_ids", soldSeats)
+                .eq("order_user", userId).eq("order_status",0));
         String orderID = moocOrderTS.get(0).getUuid();
         Integer orderId = Integer.valueOf(orderID);
 

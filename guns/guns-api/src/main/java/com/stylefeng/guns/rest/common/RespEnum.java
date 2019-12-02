@@ -24,7 +24,9 @@ public enum RespEnum {
 
     SEAT_ERROR(99,"抱歉出了一点小问题，座位码有误"),
 
-    SEAT_LIMIT(100,"单个用户一次只能买5张");
+    SEAT_LIMIT(100,"单个用户一次只能买5张"),
+
+    TOKEN_OUTTIME(1001,"抱歉 您没有登陆/token失效了，请重新登陆");
 
     private Integer status;
 
