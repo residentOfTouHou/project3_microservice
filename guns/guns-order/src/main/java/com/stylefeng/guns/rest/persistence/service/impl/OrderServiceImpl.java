@@ -250,12 +250,25 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public boolean isNotSoldSeats(String fieldId, String seats) {
-        return false;
+    public String getAmountById(String orderId) {
+        EntityWrapper<MoocOrderT> moocOrderTEntityWrapper = new EntityWrapper<>();
+        moocOrderTEntityWrapper.eq("UUID",Integer.parseInt(orderId));
+        List<MoocOrderT> moocOrderTS = moocOrderTMapper.selectList(moocOrderTEntityWrapper);
+        if(moocOrderTS != null){
+            Double orderPrice = moocOrderTS.get(0).getOrderPrice();
+            return String.valueOf(orderPrice);
+        }
+        return null;
     }
 
     @Override
-    public String getSoldSeatsByFileId(Integer fileId) {
-        return null;
+    public int updateOrderStatus(String orderId, int i) {
+        MoocOrderT moocOrderT = new MoocOrderT();
+        moocOrderT.setOrderStatus(i);
+        moocOrderT.setUuid(orderId);
+        return   moocOrderTMapper.updateById(moocOrderT);
+
     }
+
+
 }

@@ -52,9 +52,6 @@ public class OrderController {
     @Autowired
     private RedisTemplate redisTemplate;
 
-    @Reference(interfaceClass = OrderService.class, check = false)
-    OrderService orderService;
-
     @RequestMapping("getOrderInfo")
     public GunsVo getOrderInfo(HttpServletRequest request, Integer nowPage, Integer pageSize) {
         //在请求头中拿到token
@@ -135,16 +132,18 @@ public class OrderController {
     @RequestMapping("getPayInfo")
     public BaseRespVo getPayInfo(@Param("orderId")String orderId){
         BaseRespVo baseRespVo = new BaseRespVo();
-        HashMap<String, Object> map = new HashMap<>();
-        String amount = "30";
-        String address = zfbService.generateQRCode(orderId,amount);
-        if(address != null && !"".equals(address)){
-            baseRespVo.setStatus(0);
-            baseRespVo.setImgPre("");
-            map.put("orderId",orderId);
-            map.put("qRCodeAddress",address);
-            baseRespVo.setData(map);
-            return baseRespVo;
+        HashMap<String, String> map = new HashMap<>();
+        String amount = orderService.getAmountById(orderId);
+        if(amount != null) {
+            String address = zfbService.generateQRCode(orderId, amount);
+            if (address != null && !"".equals(address)) {
+                baseRespVo.setStatus(0);
+                baseRespVo.setImgPre("/http://www.duolaima.com");
+                map.put("orderId", orderId);
+                map.put("qRCodeAddress", address);
+                baseRespVo.setData(map);
+                return baseRespVo;
+            }
         }
         baseRespVo.setStatus(1);
         baseRespVo.setMsg("获取二维码失败");
@@ -153,6 +152,11 @@ public class OrderController {
 
     @RequestMapping("getPayResult")
     public BaseVo getPayResult(String orderId,Integer tryNums){
-        return zfbService.getPayResult(orderId,tryNums);
+        BaseVo payResult = zfbService.getPayResult(orderId, tryNums);
+        if(payResult.getStatus() == 0 && "支付成功".equals(payResult.getMsg())){
+            orderService.updateOrderStatus(orderId,1);
+        }
+
+        return payResult;
     }
 }
