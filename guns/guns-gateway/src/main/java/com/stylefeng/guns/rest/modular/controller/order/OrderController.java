@@ -43,7 +43,7 @@ import javax.servlet.http.HttpServletRequest;
 @RequestMapping("order")
 public class OrderController {
 
-    @Reference(interfaceClass = OrderService.class)
+    @Reference(interfaceClass = OrderService.class,check = false)
     OrderService orderService;
 
     @Autowired
@@ -51,9 +51,6 @@ public class OrderController {
 
     @Autowired
     private RedisTemplate redisTemplate;
-
-    @Reference(interfaceClass = OrderService.class, check = false)
-    OrderService orderService;
 
     @RequestMapping("getOrderInfo")
     public GunsVo getOrderInfo(HttpServletRequest request, Integer nowPage, Integer pageSize) {
