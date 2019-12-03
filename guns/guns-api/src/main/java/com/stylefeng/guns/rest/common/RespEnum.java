@@ -26,7 +26,9 @@ public enum RespEnum {
 
     SEAT_LIMIT(100,"单个用户一次只能买5张"),
 
-    TOKEN_OUTTIME(1001,"抱歉 您没有登陆/token失效了，请重新登陆");
+    TOKEN_OUTTIME(1001,"抱歉 您没有登陆/token失效了，请重新登陆"),
+
+    PROMO_NULL(1099,"暂时没有秒杀活动，敬请期待");
 
     private Integer status;
 
