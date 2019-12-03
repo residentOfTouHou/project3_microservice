@@ -7,7 +7,7 @@ public interface ZFBService {
 
     String generateQRCode(String orderId, String amount);
 
-    OrderVo isPay(String orderId);
+    OrderVo isPay(int orderId);
 
-    int updateOrderStatusById(String orderId);
+    int updateOrderStatusById(int orderId);
 }

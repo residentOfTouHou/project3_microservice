@@ -260,10 +260,9 @@ public class ZFBUtils {
     }
 
     // 测试当面付2.0查询订单
-    public static String queryPayStatus(String outTradeNo) {
+    public static int queryPayStatus(String outTradeNo) {
         // (必填) 商户订单号，通过此商户订单号查询当面付的交易状态
 //        String outTradeNo = "112233";
-        String status = null;
         // 创建查询请求builder，设置请求参数
         AlipayTradeQueryRequestBuilder builder = new AlipayTradeQueryRequestBuilder()
                 .setOutTradeNo(outTradeNo);
@@ -272,7 +271,6 @@ public class ZFBUtils {
         switch (result.getTradeStatus()) {
             case SUCCESS:
                 log.info("查询返回该订单支付成功: )");
-                status = "支付成功";
                 AlipayTradeQueryResponse response = result.getResponse();
                 dumpResponse(response);
 
@@ -282,7 +280,7 @@ public class ZFBUtils {
                         log.info(bill.getFundChannel() + ":" + bill.getAmount());
                     }
                 }
-                return status;
+                return 0;
             case FAILED:
                 log.error("查询返回该订单支付失败或被关闭!!!");
                 break;
@@ -295,7 +293,7 @@ public class ZFBUtils {
                 log.error("不支持的交易状态，交易返回异常!!!");
                 break;
         }
-        return "支付失败";
+        return 1;
     }
 
     // 测试当面付2.0退款

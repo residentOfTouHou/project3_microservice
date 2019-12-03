@@ -250,4 +250,27 @@ public class OrderServiceImpl implements OrderService {
         String s = str.toString();
         return s;
     }
+
+    @Override
+    public String getAmountById(String orderId) {
+        EntityWrapper<MoocOrderT> moocOrderTEntityWrapper = new EntityWrapper<>();
+        moocOrderTEntityWrapper.eq("UUID",Integer.parseInt(orderId));
+        List<MoocOrderT> moocOrderTS = moocOrderTMapper.selectList(moocOrderTEntityWrapper);
+        if(moocOrderTS != null){
+            Double orderPrice = moocOrderTS.get(0).getOrderPrice();
+            return String.valueOf(orderPrice);
+        }
+        return null;
+    }
+
+    @Override
+    public int updateOrderStatus(String orderId, int i) {
+        MoocOrderT moocOrderT = new MoocOrderT();
+        moocOrderT.setOrderStatus(i);
+        moocOrderT.setUuid(orderId);
+        return   moocOrderTMapper.updateById(moocOrderT);
+
+    }
+
+
 }

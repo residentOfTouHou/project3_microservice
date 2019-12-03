@@ -21,7 +21,12 @@ public interface OrderService {
     //根据FieldId获取所有已经销售的座位编号(给影院服务提供的接口)
     String getSoldSeatsByFileId(Integer fileId);
 
+    String getAmountById(String orderId);
+
+    int updateOrderStatus(String orderId, int i);
+
     //OrderVo isPay(Integer orderId);
 
     //int updateOrderStatusById();
+
 }

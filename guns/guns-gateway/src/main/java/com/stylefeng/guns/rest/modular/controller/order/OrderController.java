@@ -114,7 +114,7 @@ public class OrderController {
      * @return
      */
     @RequestMapping("getPayResult")
-    public OrderBaseReqVO getPayResult(String orderId, Integer tryNums) {
+    public OrderBaseReqVO getPayResult(int orderId, Integer tryNums) {
        /* // 查询订单状态
         OrderVo orderVo = orderService.selectOrderById(orderId);*/
         // 是否支付成功, 返回订单详情
@@ -166,6 +166,15 @@ public class OrderController {
    /* @RequestMapping("getPayResult")
     public BaseVo getPayResult(String orderId, Integer tryNums) {
         return zfbService.getPayResult(orderId, tryNums);
+    }*/
+
+   /* @RequestMapping("getPayResult")
+    public BaseVo getPayResult(String orderId,Integer tryNums){
+        BaseVo payResult = zfbService.getPayResult(orderId, tryNums);
+        if(payResult.getStatus() == 0 && "支付成功".equals(payResult.getMsg())){
+            orderService.updateOrderStatus(orderId,1);
+        }
+        return payResult;
     }*/
 
 }

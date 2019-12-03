@@ -31,17 +31,27 @@ public class ZFBServiceImpl implements ZFBService {
    /* @Override
     public BaseVo getPayResult(String orderId, Integer tryNums) {
         BaseVo baseVo = new BaseVo();
-        String result = ZFBUtils.queryPayStatus(orderId);
-        if ("支付成功".equals(result)) {
+        HashMap<String, Object> map = new HashMap<>();
+
+        int result = ZFBUtils.queryPayStatus(orderId + "MtimeCinema" );
+        if(tryNums > 3){
+            map.put("orderId",orderId);
+            map.put("orderStatus",0);
+            map.put("orderMsg","支付失败");
             baseVo.setStatus(0);
-            HashMap<String, Object> map = new HashMap<>();
-            map.put("orderId", orderId);
-            map.put("orderStatus", 1);
-            map.put("orderMsg", "支付成功");
             baseVo.setData(map);
-        } else {
-            baseVo.setStatus(1);
+            return baseVo;
+        }
+        if(result == 0){
+            map.put("orderId",orderId);
+            map.put("orderStatus",1);
+            map.put("orderMsg","支付成功");
+            baseVo.setMsg("支付成功");
+            baseVo.setStatus(0);
+            baseVo.setData(map);
+        }else{
             baseVo.setMsg("订单支付失败，请稍后重试");
+            baseVo.setStatus(1);
         }
         return baseVo;
     }*/
@@ -58,11 +68,12 @@ public class ZFBServiceImpl implements ZFBService {
         return url;
     }
 
+
     @Override
-    public OrderVo isPay(String orderId) {
+    public OrderVo isPay(int orderId) {
         // 查询订单状态
         MoocOrderT moocOrder = moocOrderTMapper.selectById(orderId);
-        String result = ZFBUtils.queryPayStatus(orderId);
+        String result = ZFBUtils.queryPayStatus();
         if ("支付成功".equals(result)) {
             // 支付成功，修改订单状态
             EntityWrapper<MoocOrderT> orderWrapper = new EntityWrapper<>();
@@ -76,7 +87,7 @@ public class ZFBServiceImpl implements ZFBService {
     }
 
     @Override
-    public int updateOrderStatusById(String orderId) {
+    public int updateOrderStatusById(int orderId) {
         int update = moocOrderTMapper.updateOrderById(orderId);
         if (update != 0) {
             return 1;

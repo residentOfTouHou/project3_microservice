@@ -13,5 +13,5 @@ import com.baomidou.mybatisplus.mapper.BaseMapper;
  */
 public interface MoocOrderTMapper extends BaseMapper<MoocOrderT> {
 
-    int updateOrderById(String orderId);
+    int updateOrderById(int orderId);
 }
