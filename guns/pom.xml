@@ -21,6 +21,7 @@
         <module>guns-order</module>
         <module>guns-zfb</module>
         <module>guns-seckill</module>
+        <module>guns-promo</module>
     </modules>
 
     <parent>
