@@ -412,7 +412,7 @@ public class ZFBUtils {
                 // 需要修改为运行机器上的路径
                 //这里传到本地再传入阿里云
 
-                String filePath = String.format("D:\\git\\realproject3\\project3_microservice\\guns\\guns-zfb\\src\\main\\resources" + "/qr-%s.png",
+                String filePath = String.format("D:\\WangDao\\microservice\\cinema_project\\project3_microservice\\guns\\guns-zfb\\src\\main\\resources" + "/qr-%s.png",
                         response.getOutTradeNo());
                 log.info("filePath:" + filePath);
                 ZxingUtils.getQRCodeImge(response.getQrCode(), 256, filePath);

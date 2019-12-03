@@ -47,16 +47,16 @@ public class OrderController {
 
     private final String IMG_PRE = "http://img.meetingshop.cn/";
 
+    @Reference(interfaceClass = OrderService.class, check = false)
+    OrderService orderService;
+
     @Autowired
     private JwtProperties jwtProperties;
 
     @Autowired
     private RedisTemplate redisTemplate;
 
-    @Reference(interfaceClass = OrderService.class, check = false)
-    OrderService orderService;
-
-    @Reference(interfaceClass = ZFBService.class)
+    @Reference(interfaceClass = ZFBService.class, check = false)
     ZFBService zfbService;
 
     @RequestMapping("getOrderInfo")
@@ -97,6 +97,10 @@ public class OrderController {
         }
         //校验token抛出异常
         String userName = (String) redisTemplate.opsForValue().get(authToken);
+        if (userName == null) {
+            //调用logout 删除 token 退出
+            return RespBeanUtil.beanUtil(RespEnum.TOKEN_OUTTIME.getStatus(), RespEnum.TOKEN_OUTTIME.getMsg(), null);
+        }
 
         OrderVo orderVo = orderService.saveOrderInfo(fieldId, soldSeats, seatsName, userName);
         return RespBeanUtil.beanUtil(RespEnum.NORMAL_RESP.getStatus(), "", orderVo);
