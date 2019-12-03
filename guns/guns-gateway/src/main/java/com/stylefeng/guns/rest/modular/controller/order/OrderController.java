@@ -47,7 +47,7 @@ public class OrderController {
 
     private final String IMG_PRE = "http://img.meetingshop.cn/";
 
-    @Reference(interfaceClass = OrderService.class, check = false)
+    @Reference(interfaceClass = OrderService.class, check = false, timeout = 10000)
     OrderService orderService;
 
     @Autowired
@@ -94,14 +94,13 @@ public class OrderController {
         String authToken = null;
         if (requestHeader != null && requestHeader.startsWith("Bearer ")) {
             authToken = requestHeader.substring(7);
-        }
-        //校验token抛出异常
-        String userName = (String) redisTemplate.opsForValue().get(authToken);
-        if (userName == null) {
+        } else {
+            //校验token抛出异常
+            //if (userName == null) {
             //调用logout 删除 token 退出
             return RespBeanUtil.beanUtil(RespEnum.TOKEN_OUTTIME.getStatus(), RespEnum.TOKEN_OUTTIME.getMsg(), null);
         }
-
+        String userName = (String) redisTemplate.opsForValue().get(authToken);
         OrderVo orderVo = orderService.saveOrderInfo(fieldId, soldSeats, seatsName, userName);
         return RespBeanUtil.beanUtil(RespEnum.NORMAL_RESP.getStatus(), "", orderVo);
     }

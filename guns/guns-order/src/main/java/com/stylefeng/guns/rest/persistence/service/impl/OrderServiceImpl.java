@@ -35,7 +35,7 @@ import java.util.concurrent.TimeUnit;
 
 
 @Component
-@Service(interfaceClass = OrderService.class)
+@Service(interfaceClass = OrderService.class, timeout = 10000)
 public class OrderServiceImpl implements OrderService {
     @Autowired
     MoocOrderTMapper moocOrderTMapper;
