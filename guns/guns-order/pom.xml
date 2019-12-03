@@ -37,8 +37,9 @@
             <artifactId>guns-core</artifactId>
         </dependency>
         <dependency>
-            <groupId>log4j</groupId>
+            <groupId>org.apache.logging.log4j</groupId>
             <artifactId>log4j</artifactId>
+            <version>2.12.1</version>
         </dependency>
         <dependency>
             <groupId>com.stylefeng.guns</groupId>

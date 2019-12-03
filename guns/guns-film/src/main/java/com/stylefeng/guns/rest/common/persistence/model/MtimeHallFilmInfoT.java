@@ -13,6 +13,7 @@ import java.io.Serializable;
  * </p>
  *
  * @author stylefeng
+ * @since 2019-12-01
  * @since 2019-12-02
  */
 @TableName("mtime_hall_film_info_t")

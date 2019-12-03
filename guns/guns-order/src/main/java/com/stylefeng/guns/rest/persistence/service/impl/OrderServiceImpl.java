@@ -249,13 +249,4 @@ public class OrderServiceImpl implements OrderService {
         return s;
     }
 
-    @Override
-    public boolean isNotSoldSeats(String fieldId, String seats) {
-        return false;
-    }
-
-    @Override
-    public String getSoldSeatsByFileId(Integer fileId) {
-        return null;
-    }
 }

@@ -1,6 +1,23 @@
 package com.stylefeng.guns.rest.modular.controller.order;
 
 import com.alibaba.dubbo.config.annotation.Reference;
+import com.stylefeng.guns.rest.common.RespEnum;
+import com.stylefeng.guns.rest.config.properties.JwtProperties;
+import com.stylefeng.guns.rest.order.OrderService;
+import com.stylefeng.guns.rest.order.vo.OrderVo;
+import com.stylefeng.guns.rest.util.RespBeanUtil;
+import com.stylefeng.guns.rest.vo.GunsVo;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.web.bind.annotation.RequestMapping;
+import com.alibaba.dubbo.config.annotation.Reference;
+import com.stylefeng.guns.rest.cinema.vo.BaseRespVo;
+import com.stylefeng.guns.rest.order.OrderService;
+import com.stylefeng.guns.rest.user.vo.BaseVo;
+import com.stylefeng.guns.rest.zfb.ZFBService;
+import org.apache.ibatis.annotations.Param;
+import org.springframework.web.bind.annotation.RequestMapping;
+import com.alibaba.dubbo.config.annotation.Reference;
 import com.stylefeng.guns.rest.order.OrderService;
 import com.stylefeng.guns.rest.utils.OrderBaseReqVO;
 import org.springframework.data.domain.Sort;
@@ -19,6 +36,11 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+import java.util.HashMap;
+
+import javax.servlet.http.HttpServletRequest;
+
 @RestController
 @RequestMapping("order")
 public class OrderController {
@@ -33,6 +55,9 @@ public class OrderController {
 
     @Reference(interfaceClass = OrderService.class, check = false)
     OrderService orderService;
+
+    @Reference(interfaceClass = ZFBService.class)
+    ZFBService zfbService;
 
     @RequestMapping("getOrderInfo")
     public GunsVo getOrderInfo(HttpServletRequest request, Integer nowPage, Integer pageSize) {
@@ -86,11 +111,11 @@ public class OrderController {
      * @return
      */
     @RequestMapping("getPayResult")
-    public OrderBaseReqVO getPayResult(Integer orderId, Integer tryNums) {
+    public OrderBaseReqVO getPayResult(String orderId, Integer tryNums) {
        /* // 查询订单状态
         OrderVo orderVo = orderService.selectOrderById(orderId);*/
         // 是否支付成功, 返回订单详情
-        OrderVo orderVo = orderService.isPay(orderId);
+        OrderVo orderVo = zfbService.isPay(orderId);
 
         if (orderVo.getOrderStatus() == 1 && tryNums <= 3) {
             // 支付成功
@@ -105,9 +130,39 @@ public class OrderController {
             return OrderBaseReqVO.fail(0, massage);
         }
         // 三次后修改订单状态，订单关闭
-        orderService.updateOrderStatusById();
-        String message = "支付失败，订单即将关闭，请重新下单";
-        return OrderBaseReqVO.fail(2, message);
+        int update = zfbService.updateOrderStatusById(orderId);
+        if (update == 1) {
+            String message = "支付失败，订单即将关闭，请重新下单";
+            return OrderBaseReqVO.fail(2, message);
+        }
+        return null;
     }
+
+//    @Reference(interfaceClass = OrderService.class)
+//    OrderService orderService;
+
+    @RequestMapping("getPayInfo")
+    public BaseRespVo getPayInfo(@Param("orderId") String orderId) {
+        BaseRespVo baseRespVo = new BaseRespVo();
+        HashMap<String, Object> map = new HashMap<>();
+        String amount = "30";
+        String address = zfbService.generateQRCode(orderId, amount);
+        if (address != null && !"".equals(address)) {
+            baseRespVo.setStatus(0);
+            baseRespVo.setImgPre("");
+            map.put("orderId", orderId);
+            map.put("qRCodeAddress", address);
+            baseRespVo.setData(map);
+            return baseRespVo;
+        }
+        baseRespVo.setStatus(1);
+        baseRespVo.setMsg("获取二维码失败");
+        return baseRespVo;
+    }
+
+   /* @RequestMapping("getPayResult")
+    public BaseVo getPayResult(String orderId, Integer tryNums) {
+        return zfbService.getPayResult(orderId, tryNums);
+    }*/
 
 }
