@@ -20,36 +20,39 @@ public class OrderBaseReqVO<T> implements Serializable {
 
     private String nowPage;
 
-    private int status;
+    private int Status;
+
+    private int orderStatus;
 
     private String totalPage;
 
     public static OrderBaseReqVO success(String imgPre) {
-        OrderBaseReqVO failedBaseReqVO = new OrderBaseReqVO();
-        failedBaseReqVO.setImgPre(imgPre);
-        failedBaseReqVO.setMsg("");
-        failedBaseReqVO.setNowPage("");
-        failedBaseReqVO.setStatus(0);
-        failedBaseReqVO.setTotalPage("");
-        return failedBaseReqVO;
+        OrderBaseReqVO orderBaseReqVO = new OrderBaseReqVO();
+        orderBaseReqVO.setImgPre(imgPre);
+        orderBaseReqVO.setMsg("");
+        orderBaseReqVO.setStatus(0);
+        orderBaseReqVO.setNowPage("");
+        orderBaseReqVO.setTotalPage("");
+        return orderBaseReqVO;
     }
 
     public static OrderBaseReqVO success(Object data, String imgPre) {
-        OrderBaseReqVO failedBaseReqVO = new OrderBaseReqVO();
-        failedBaseReqVO.setImgPre(imgPre);
-        failedBaseReqVO.setMsg("");
-        failedBaseReqVO.setNowPage("");
-        failedBaseReqVO.setStatus(0);
-        failedBaseReqVO.setTotalPage("");
-        failedBaseReqVO.setData(data);
-        return failedBaseReqVO;
+        OrderBaseReqVO orderBaseReqVO = new OrderBaseReqVO();
+        orderBaseReqVO.setImgPre(imgPre);
+        orderBaseReqVO.setMsg("");
+        orderBaseReqVO.setNowPage("");
+        orderBaseReqVO.setStatus(0);
+        orderBaseReqVO.setTotalPage("");
+        orderBaseReqVO.setData(data);
+        return orderBaseReqVO;
     }
 
-    public static OrderBaseReqVO fail(int status, String message) {
-        OrderBaseReqVO failedBaseReqVO = new OrderBaseReqVO();
-        failedBaseReqVO.setStatus(status);
-        failedBaseReqVO.setMsg(message);
-        return failedBaseReqVO;
+    public static OrderBaseReqVO fail(int orderStatus, String message) {
+        OrderBaseReqVO orderBaseReqVO = new OrderBaseReqVO();
+        orderBaseReqVO.setStatus(0);
+        orderBaseReqVO.setOrderStatus(orderStatus);
+        orderBaseReqVO.setMsg(message);
+        return orderBaseReqVO;
     }
 }
 

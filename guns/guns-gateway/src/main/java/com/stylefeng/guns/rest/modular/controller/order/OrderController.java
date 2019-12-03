@@ -16,10 +16,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.HashMap;
+import java.util.Map;
 
 @RestController
 @RequestMapping("order")
 public class OrderController {
+
+    private final String IMG_PRE = "http://img.meetingshop.cn/";
 
     @Autowired
     private JwtProperties jwtProperties;
@@ -81,24 +85,29 @@ public class OrderController {
      * @param tryNums
      * @return
      */
-   /* @RequestMapping("getPayResult")
+    @RequestMapping("getPayResult")
     public OrderBaseReqVO getPayResult(Integer orderId, Integer tryNums) {
-        // 查询订单状态
-        OrderVO orderVO = orderService.selectOrderById();
-        // 是否支付
-        boolean payStatus =
+       /* // 查询订单状态
+        OrderVo orderVo = orderService.selectOrderById(orderId);*/
+        // 是否支付成功, 返回订单详情
+        OrderVo orderVo = orderService.isPay(orderId);
 
-        if (orderVO.getOrderStatus == 1 && tryNums <= 3) {
+        if (orderVo.getOrderStatus() == 1 && tryNums <= 3) {
             // 支付成功
-            return OrderBaseReqVO.success();
-
-        } else if (tryNums < 3 && orderVO.orderStatus == 0) {
+            Map<String, Object> data = new HashMap<>();
+            data.put("orderId", orderVo.getOrderId());
+            data.put("orderMsg", "支付成功！");
+            data.put("orderStatus", orderVo.getOrderStatus());
+            return OrderBaseReqVO.success(data, IMG_PRE);
+        } else if (tryNums < 3 && orderVo.getOrderStatus() == 0) {
             // 未支付
-            return OrderBaseReqVO.fail();
+            String massage = "支付失败！";
+            return OrderBaseReqVO.fail(0, massage);
         }
         // 三次后修改订单状态，订单关闭
         orderService.updateOrderStatusById();
-        return OrderBaseReqVO.fail();
+        String message = "支付失败，订单即将关闭，请重新下单";
+        return OrderBaseReqVO.fail(2, message);
     }
-*/
+
 }

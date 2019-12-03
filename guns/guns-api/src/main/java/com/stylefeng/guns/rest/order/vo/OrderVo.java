@@ -31,5 +31,5 @@ public class OrderVo implements Serializable {
 
     private String orderTimestamp;
 
-    private String orderStatus;
+    private int orderStatus;
 }
