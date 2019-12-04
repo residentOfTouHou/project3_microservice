@@ -2,6 +2,7 @@ package com.stylefeng.guns.rest.persistence.service.impl;
 
 import com.alibaba.dubbo.config.annotation.Service;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
+import com.baomidou.mybatisplus.mapper.Wrapper;
 import com.stylefeng.guns.rest.cinema.CinemaService;
 import com.stylefeng.guns.rest.cinema.vo.*;
 import com.stylefeng.guns.rest.cinema.vo.FilmInfoVO;
@@ -46,8 +47,11 @@ public class CinemaServiceImpl implements CinemaService {
     @Autowired
     MtimeFieldTMapper mtimeFieldTMapper;
 
+    @Autowired
+    MoocOrderTMapper moocOrderTMapper;
+
     @Override
-    public CinemasRespVo getCinemas(Integer brandId, Integer hallType, Integer areaId, Integer pageSize, Integer nowPage) throws NullPointerException{
+    public CinemasRespVo getCinemas(Integer brandId, Integer hallType, Integer areaId, Integer pageSize, Integer nowPage) throws NullPointerException {
         EntityWrapper<MtimeCinemaT> entityWrapper = new EntityWrapper<>();
         if (brandId != 99) {
             entityWrapper.eq("brand_id", brandId);
@@ -215,7 +219,18 @@ public class CinemaServiceImpl implements CinemaService {
         //放映厅信息
         HallInfoVO hallInfoVO = mtimeFieldTMapper.selectHallByFieldId(fieldId);
         hallInfoVO.setDiscountPrice("");
-        hallInfoVO.setSoldSeats("5");
+        // 查询已售出座位
+        List<String> seatsIds = moocOrderTMapper.selectSeatsByFieldId(fieldId);
+        StringBuffer soldSeats = new StringBuffer();
+        if (seatsIds != null && seatsIds.size() > 0) {
+            // 有已出售的座位
+            for (String seatsId : seatsIds) {
+                soldSeats.append(seatsId).append(",");
+            }
+            hallInfoVO.setSoldSeats(soldSeats.toString().substring(0, soldSeats.length() - 1));
+        } else {
+            hallInfoVO.setSoldSeats(soldSeats.toString());
+        }
         data.put("filmInfo", filmInfoVO);
         data.put("hallInfo", hallInfoVO);
         CinemaBaseReqVO baseReqVO = CinemaBaseReqVO.success(data, IMG_PRE);

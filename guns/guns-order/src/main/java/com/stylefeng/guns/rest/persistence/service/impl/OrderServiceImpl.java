@@ -20,6 +20,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
 import java.util.List;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.stylefeng.guns.rest.order.vo.SeatBean;
 import com.stylefeng.guns.rest.persistence.dao.*;
@@ -35,7 +36,7 @@ import java.util.concurrent.TimeUnit;
 
 
 @Component
-@Service(interfaceClass = OrderService.class, timeout = 10000)
+@Service(interfaceClass = OrderService.class)
 public class OrderServiceImpl implements OrderService {
     @Autowired
     MoocOrderTMapper moocOrderTMapper;
@@ -56,10 +57,11 @@ public class OrderServiceImpl implements OrderService {
 
     /**
      * 验证售出的票是否为真
+     *
      * @return
      */
     @Override
-    public Integer isTrueSeats(String fieldId, String soldSeats)  {
+    public Integer isTrueSeats(String fieldId, String soldSeats) {
         MtimeFieldT mtimeFieldT = mtimeFieldTMapper.selectById(fieldId);
         Integer hallId = mtimeFieldT.getHallId();
         MtimeHallDictT mtimeHallDictT = mtimeHallDictTMapper.selectById(hallId);
@@ -67,14 +69,13 @@ public class OrderServiceImpl implements OrderService {
 
         //检查redis中有无json可以使用
         SeatBean seatBean = checkRedisSeatJson(seatAddress);
-
         String[] split = soldSeats.split(",");
-        if(split.length > seatBean.getLimit()){
+        if (split.length > seatBean.getLimit()) {
             return -9;
         }
         Integer contains = 0;
         for (String s : split) {
-            if(!seatBean.getIds().contains(s)){
+            if (!seatBean.getIds().contains(s)) {
                 contains = -1;
                 break;
             }
@@ -88,7 +89,7 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public boolean isNotSoldSeats(String fieldId, String seats) {
         EntityWrapper<MoocOrderT> entityWrapper = new EntityWrapper<>();
-        entityWrapper.eq("field_id",fieldId);
+        entityWrapper.eq("field_id", fieldId);
         List<MoocOrderT> moocOrderTS = moocOrderTMapper.selectList(entityWrapper);
         StringBuffer buffer = new StringBuffer();
         for (MoocOrderT moocOrderT : moocOrderTS) {
@@ -98,7 +99,7 @@ public class OrderServiceImpl implements OrderService {
         String[] split = seats.split(",");
         boolean result = false;
         for (String s : split) {
-            if(seatBuyed.contains(s)){
+            if (seatBuyed.contains(s)) {
                 result = true;
                 break;
             }
@@ -144,7 +145,7 @@ public class OrderServiceImpl implements OrderService {
         moocOrderTMapper.insert(moocOrderT);
         //缺少唯一标识
         List<MoocOrderT> moocOrderTS = moocOrderTMapper.selectList(new EntityWrapper<MoocOrderT>().eq("seats_ids", soldSeats)
-                .eq("order_user", userId).eq("order_status",0));
+                .eq("order_user", userId).eq("order_status", 0));
         String orderID = moocOrderTS.get(0).getUuid();
         Integer orderId = Integer.valueOf(orderID);
 
@@ -157,7 +158,7 @@ public class OrderServiceImpl implements OrderService {
         orderVo.setCinemaName(String.valueOf(mtimeFieldT.getCinemaId()));
         orderVo.setSeatsName(seatsName);
         orderVo.setOrderPrice(String.valueOf(orderPrice));
-        orderVo.setOrderTimestamp(String.valueOf(orderTime.getTime()/1000)); //秒级时间戳
+        orderVo.setOrderTimestamp(String.valueOf(orderTime.getTime() / 1000)); //秒级时间戳
         return orderVo;
     }
 
@@ -166,15 +167,15 @@ public class OrderServiceImpl implements OrderService {
         SeatBean seatBean = new SeatBean();
         String redisSeatJson = (String) redisTemplate.opsForValue().get(seatAddress);
         try {
-            if(redisSeatJson==null){
+            if (redisSeatJson == null) {
                 File file = null;
-                file = new File(ResourceUtils.getFile(ResourceUtils.CLASSPATH_URL_PREFIX)+"\\"+seatAddress);
-                seatBean = objectMapper.readValue(file,SeatBean.class);
+                file = new File(ResourceUtils.getFile(ResourceUtils.CLASSPATH_URL_PREFIX) + "\\" + seatAddress);
+                seatBean = objectMapper.readValue(file, SeatBean.class);
                 String json = objectMapper.readValue(file, String.class);
-                redisTemplate.opsForValue().set(seatAddress,json);
-                redisTemplate.expire(seatAddress,60, TimeUnit.SECONDS);
-            }else {
-                seatBean = objectMapper.readValue(redisSeatJson,SeatBean.class);
+                redisTemplate.opsForValue().set(seatAddress, json);
+                redisTemplate.expire(seatAddress, 60, TimeUnit.SECONDS);
+            } else {
+                seatBean = objectMapper.readValue(redisSeatJson, SeatBean.class);
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -184,6 +185,7 @@ public class OrderServiceImpl implements OrderService {
 
     /**
      * 获取当前用户的订单信息
+     *
      * @param username
      * @param nowPage
      * @param pageSize
@@ -192,18 +194,19 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public GunsVo getOrderInfoByUserName(String username, Integer nowPage, Integer pageSize) {
         //分页
-        PageHelper.startPage(nowPage,pageSize);
+        PageHelper.startPage(nowPage, pageSize);
         //拿到userId
-        try{
+        try {
             List<MtimeUserT> userTList = mtimeUserTMapper.selectList(new EntityWrapper<MtimeUserT>().eq("user_name", username));
             Integer userId = 1;
-            if (!CollectionUtils.isEmpty(userTList)){
+            if (!CollectionUtils.isEmpty(userTList)) {
                 userId = userTList.get(0).getUuid();
             }
             //查询到需要的数据
+            PageInfo<OrderVo2> orderVo2PageInfo = null;
             List<OrderVo3> orderVoList = moocOrderTMapper.selectOrderInfoByUserId(userId);
             List<OrderVo2> orderVoList2 = moocOrderTMapper.selectOrderInfoByUserId2(userId);
-            for(int x=0;x<orderVoList.size();x++){
+            for (int x = 0; x < orderVoList.size(); x++) {
                 String s2 = String.valueOf(orderVoList.get(x).getOrderId());
                 orderVoList2.get(x).setOrderId(s2);
                 //转换时间戳毫秒格式
@@ -217,25 +220,25 @@ public class OrderServiceImpl implements OrderService {
                 String fieldTime = orderVoList.get(x).getFieldTime();
                 String str = "19年12月2日 " + fieldTime;
                 orderVoList2.get(x).setFieldTime(str);
-                //返回响应报文
-                GunsVo gunsVo = new GunsVo();
-                PageInfo<OrderVo2> orderVo2PageInfo = new PageInfo<>(orderVoList2);
-                if(nowPage >0 && (orderVo2PageInfo.getTotal() / pageSize < nowPage - 1) ){
-                    return new GunsVo(1,"订单列表为空哦！~");
-                }else {
-                    gunsVo.setStatus(0);
-                    gunsVo.setData(orderVo2PageInfo.getList());
-                    return gunsVo;
-                }
+                orderVo2PageInfo = new PageInfo<>(orderVoList2);
             }
-        }catch (Exception e){
-            return new GunsVo(999,"系统出现异常，请联系管理员");
+            //返回响应报文
+            GunsVo gunsVo = new GunsVo();
+            if (nowPage > 0 && (orderVo2PageInfo.getTotal() / pageSize < nowPage - 1)) {
+                return new GunsVo(1, "订单列表为空哦！~");
+            } else {
+                gunsVo.setStatus(0);
+                gunsVo.setData(orderVo2PageInfo.getList());
+                return gunsVo;
+            }
+        } catch (Exception e) {
+            return new GunsVo(999, "系统出现异常，请联系管理员");
         }
-        return null;
     }
 
     /**
      * 获取已经售出的座位号
+     *
      * @param fileId
      * @return 返回已经售出的座位号（字符串格式）
      */
@@ -254,9 +257,9 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public String getAmountById(String orderId) {
         EntityWrapper<MoocOrderT> moocOrderTEntityWrapper = new EntityWrapper<>();
-        moocOrderTEntityWrapper.eq("UUID",Integer.parseInt(orderId));
+        moocOrderTEntityWrapper.eq("UUID", Integer.parseInt(orderId));
         List<MoocOrderT> moocOrderTS = moocOrderTMapper.selectList(moocOrderTEntityWrapper);
-        if(moocOrderTS != null){
+        if (moocOrderTS != null) {
             Double orderPrice = moocOrderTS.get(0).getOrderPrice();
             return String.valueOf(orderPrice);
         }
@@ -268,7 +271,7 @@ public class OrderServiceImpl implements OrderService {
         MoocOrderT moocOrderT = new MoocOrderT();
         moocOrderT.setOrderStatus(i);
         moocOrderT.setUuid(orderId);
-        return   moocOrderTMapper.updateById(moocOrderT);
+        return moocOrderTMapper.updateById(moocOrderT);
 
     }
 

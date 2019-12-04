@@ -11,7 +11,9 @@ import com.baomidou.mybatisplus.mapper.BaseMapper;
  * @author stylefeng
  * @since 2019-12-03
  */
-public interface MoocOrderTMapper extends BaseMapper<MoocOrderT> {
+public interface OrderTMapper extends BaseMapper<MoocOrderT> {
 
-    int updateOrderById(int orderId);
+    MoocOrderT selectById(int orderId);
+
+    int updateOrderById(int orderId, int orderStatus);
 }

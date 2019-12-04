@@ -5,11 +5,10 @@ package com.stylefeng.guns.rest.common.persistence.service.impl;
 
 import com.alibaba.dubbo.config.annotation.Service;
 import com.aliyun.oss.OSSClient;
-import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.stylefeng.guns.rest.component.AliyunComponent;
 import com.stylefeng.guns.rest.common.persistence.utils.ZFBUtils;
 import com.stylefeng.guns.rest.order.vo.OrderVo;
-import com.stylefeng.guns.rest.persistence.dao.MoocOrderTMapper;
+import com.stylefeng.guns.rest.persistence.dao.OrderTMapper;
 import com.stylefeng.guns.rest.persistence.model.MoocOrderT;
 import com.stylefeng.guns.rest.zfb.ZFBService;
 import org.springframework.beans.BeanUtils;
@@ -26,14 +25,14 @@ public class ZFBServiceImpl implements ZFBService {
     AliyunComponent aliyunComponent;
 
     @Autowired
-    MoocOrderTMapper moocOrderTMapper;
+    OrderTMapper moocOrderTMapper;
 
    /* @Override
     public BaseVo getPayResult(String orderId, Integer tryNums) {
         BaseVo baseVo = new BaseVo();
         HashMap<String, Object> map = new HashMap<>();
 
-        int result = ZFBUtils.queryPayStatus(orderId + "MtimeCinema" );
+        int result = ZFBUtils.queryPayStatus(orderId + "MtimeCinema");
         if(tryNums > 3){
             map.put("orderId",orderId);
             map.put("orderStatus",0);
@@ -73,12 +72,13 @@ public class ZFBServiceImpl implements ZFBService {
     public OrderVo isPay(int orderId) {
         // 查询订单状态
         MoocOrderT moocOrder = moocOrderTMapper.selectById(orderId);
-        String result = ZFBUtils.queryPayStatus();
-        if ("支付成功".equals(result)) {
+
+        int result = ZFBUtils.queryPayStatus(orderId + "MtimeCinema");
+        if (result == 0) {
             // 支付成功，修改订单状态
-            EntityWrapper<MoocOrderT> orderWrapper = new EntityWrapper<>();
-            orderWrapper.eq("order_statue", 1);
-            moocOrderTMapper.update(moocOrder, orderWrapper);
+            int orderStatus = 1;
+            moocOrder.setOrderStatus(1);
+            moocOrderTMapper.updateOrderById(orderId, orderStatus);
             OrderVo orderVo = convert2OrderVo(moocOrder);
             return orderVo;
         }
@@ -88,7 +88,8 @@ public class ZFBServiceImpl implements ZFBService {
 
     @Override
     public int updateOrderStatusById(int orderId) {
-        int update = moocOrderTMapper.updateOrderById(orderId);
+        int orderStatus = 2;
+        int update = moocOrderTMapper.updateOrderById(orderId, orderStatus);
         if (update != 0) {
             return 1;
         }
@@ -98,6 +99,7 @@ public class ZFBServiceImpl implements ZFBService {
     private OrderVo convert2OrderVo(MoocOrderT moocOrder) {
         OrderVo orderVo = new OrderVo();
         BeanUtils.copyProperties(moocOrder, orderVo);
+        orderVo.setOrderId(Integer.parseInt(moocOrder.getUuid()));
         return orderVo;
     }
 }

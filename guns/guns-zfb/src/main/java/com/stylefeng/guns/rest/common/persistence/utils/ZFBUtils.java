@@ -38,7 +38,7 @@ public class ZFBUtils {
     private static AlipayTradeService tradeService;
 
     // 支付宝当面付2.0服务（集成了交易保障接口逻辑）
-    private static AlipayTradeService   tradeWithHBService;
+    private static AlipayTradeService tradeWithHBService;
 
     // 支付宝交易保障接口服务，供测试接口api使用，请先阅读readme.txt
     private static AlipayMonitorService monitorService;
@@ -340,7 +340,7 @@ public class ZFBUtils {
     }
 
     // 测试当面付2.0生成支付二维码
-    public static String generateQRcode(String orderId,String totalAmount) {
+    public static String generateQRcode(String orderId, String totalAmount) {
         String rs = null;
         // (必填) 商户网站订单系统中唯一订单号，64个字符以内，只能包含字母、数字、下划线，
         // 需保证商户系统端不能重复，建议通过数据库sequence生成，
@@ -414,7 +414,7 @@ public class ZFBUtils {
                         response.getOutTradeNo());
                 log.info("filePath:" + filePath);
                 ZxingUtils.getQRCodeImge(response.getQrCode(), 256, filePath);
-                rs = filePath ;
+                rs = filePath;
                 break;
 
             case FAILED:

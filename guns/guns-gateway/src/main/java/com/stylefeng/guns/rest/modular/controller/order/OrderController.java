@@ -135,8 +135,10 @@ public class OrderController {
         // 三次后修改订单状态，订单关闭
         int update = zfbService.updateOrderStatusById(orderId);
         if (update == 1) {
-            String message = "支付失败，订单即将关闭，请重新下单";
-            return OrderBaseReqVO.fail(2, message);
+            String message = "支付失败, 请重新下单";
+            Map<String, Object> data = new HashMap<>();
+            data.put("orderStatus", 2);
+            return OrderBaseReqVO.fail(data, message);
         }
         return null;
     }
@@ -163,12 +165,7 @@ public class OrderController {
         return baseRespVo;
     }
 
-   /* @RequestMapping("getPayResult")
-    public BaseVo getPayResult(String orderId, Integer tryNums) {
-        return zfbService.getPayResult(orderId, tryNums);
-    }*/
-
-   /* @RequestMapping("getPayResult")
+    /* @RequestMapping("getPayResult")
     public BaseVo getPayResult(String orderId,Integer tryNums){
         BaseVo payResult = zfbService.getPayResult(orderId, tryNums);
         if(payResult.getStatus() == 0 && "支付成功".equals(payResult.getMsg())){

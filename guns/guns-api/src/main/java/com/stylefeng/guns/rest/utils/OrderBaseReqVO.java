@@ -42,6 +42,7 @@ public class OrderBaseReqVO<T> implements Serializable {
         orderBaseReqVO.setMsg("");
         orderBaseReqVO.setNowPage("");
         orderBaseReqVO.setStatus(0);
+        orderBaseReqVO.setOrderStatus(1);
         orderBaseReqVO.setTotalPage("");
         orderBaseReqVO.setData(data);
         return orderBaseReqVO;
@@ -51,6 +52,14 @@ public class OrderBaseReqVO<T> implements Serializable {
         OrderBaseReqVO orderBaseReqVO = new OrderBaseReqVO();
         orderBaseReqVO.setStatus(0);
         orderBaseReqVO.setOrderStatus(orderStatus);
+        orderBaseReqVO.setMsg(message);
+        return orderBaseReqVO;
+    }
+
+    public static OrderBaseReqVO fail(Object data, String message) {
+        OrderBaseReqVO orderBaseReqVO = new OrderBaseReqVO();
+        orderBaseReqVO.setStatus(0);
+        orderBaseReqVO.setData(data);
         orderBaseReqVO.setMsg(message);
         return orderBaseReqVO;
     }
