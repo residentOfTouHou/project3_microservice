@@ -50,7 +50,7 @@ public class OrderBaseReqVO<T> implements Serializable {
 
     public static OrderBaseReqVO fail(int orderStatus, String message) {
         OrderBaseReqVO orderBaseReqVO = new OrderBaseReqVO();
-        orderBaseReqVO.setStatus(0);
+        orderBaseReqVO.setStatus(1);
         orderBaseReqVO.setOrderStatus(orderStatus);
         orderBaseReqVO.setMsg(message);
         return orderBaseReqVO;
@@ -58,7 +58,7 @@ public class OrderBaseReqVO<T> implements Serializable {
 
     public static OrderBaseReqVO fail(Object data, String message) {
         OrderBaseReqVO orderBaseReqVO = new OrderBaseReqVO();
-        orderBaseReqVO.setStatus(0);
+        orderBaseReqVO.setStatus(1);
         orderBaseReqVO.setData(data);
         orderBaseReqVO.setMsg(message);
         return orderBaseReqVO;
